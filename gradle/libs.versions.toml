@@ -1,0 +1,67 @@
+[versions]
+ktx-coroutines = "1.6.4"
+ktx-serialization = "1.5.1"
+ktx-serialization-yaml = "0.54.0"
+kmongo = "4.9.0"
+lettuce-core = "6.2.4.RELEASE"
+spigot = "1.19.3-R0.1-SNAPSHOT"
+spigot-annotate = "1.2.3-SNAPSHOT"
+mccoroutine = "2.12.1"
+kotlin = "1.8.20"
+plugins-shadow = "7.1.2"
+plugins-idea-ext = "1.1.6"
+koin-core = "3.4.1"
+koin-annotations = "1.2.1"
+ksp = "1.8.21-1.0.11"
+
+[libraries.ktx-serialization-json]
+module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm"
+version.ref = "ktx-serialization"
+
+[libraries.ktx-serialization-yaml]
+module = "com.charleskorn.kaml:kaml"
+version.ref = "ktx-serialization-yaml"
+
+[libraries.platform-spigot-api]
+module = "org.spigotmc:spigot-api"
+version.ref = "spigot"
+
+[libraries.platform-spigot-annotate]
+module = "org.spigotmc:plugin-annotations"
+version.ref = "spigot-annotate"
+
+[libraries.mccoroutine-bukkit-api]
+module = "com.github.shynixn.mccoroutine:mccoroutine-bukkit-api"
+version.ref = "mccoroutine"
+
+[libraries.mccoroutine-bukkit-core]
+module = "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core"
+version.ref = "mccoroutine"
+
+[libraries.datastore-kmongo]
+module = "org.litote.kmongo:kmongo-coroutine-serialization"
+version.ref = "kmongo"
+
+[libraries.datastore-lettuce]
+module = "io.lettuce:lettuce-core"
+version.ref = "lettuce-core"
+
+[libraries.ktx-coroutines-core]
+module = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+version.ref = "ktx-coroutines"
+
+[libraries.ktx-coroutines-jdk8]
+module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8"
+version.ref = "ktx-coroutines"
+
+[libraries.koin-core]
+module = "io.insert-koin:koin-core"
+version.ref = "koin-core"
+
+[libraries.koin-annotations-core]
+module = "io.insert-koin:koin-annotations"
+version.ref = "koin-annotations"
+
+[libraries.koin-annotations-ksp-compiler]
+module = "io.insert-koin:koin-ksp-compiler"
+version.ref = "koin-annotations"
