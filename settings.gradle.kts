@@ -1,6 +1,6 @@
 rootProject.name = "mcplugins-toolkit"
-include(
-    "api:bukkit",
-    "platforms:bukkit",
-    "shared"
-)
+
+include("shared")
+listOf("spigot").forEach {
+    include("$it:api", "$it:platform")
+}

@@ -1,4 +1,5 @@
 [versions]
+ktx-datetime = "0.4.0"
 ktx-coroutines = "1.6.4"
 ktx-serialization = "1.5.1"
 ktx-serialization-yaml = "0.54.0"
@@ -7,12 +8,13 @@ lettuce-core = "6.2.4.RELEASE"
 spigot = "1.19.3-R0.1-SNAPSHOT"
 spigot-annotate = "1.2.3-SNAPSHOT"
 mccoroutine = "2.12.1"
+hk2 = "3.0.4"
+javax-inject = "1.1"
+
 kotlin = "1.8.20"
 plugins-shadow = "7.1.2"
 plugins-idea-ext = "1.1.6"
-koin-core = "3.4.1"
-koin-annotations = "1.2.1"
-ksp = "1.8.21-1.0.11"
+javax-annotations = "1.3.2"
 
 [libraries.ktx-serialization-json]
 module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm"
@@ -54,14 +56,26 @@ version.ref = "ktx-coroutines"
 module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8"
 version.ref = "ktx-coroutines"
 
-[libraries.koin-core]
-module = "io.insert-koin:koin-core"
-version.ref = "koin-core"
+[libraries.ktx-datetime]
+module = "org.jetbrains.kotlinx:kotlinx-datetime"
+version.ref = "ktx-datetime"
 
-[libraries.koin-annotations-core]
-module = "io.insert-koin:koin-annotations"
-version.ref = "koin-annotations"
+[libraries.hk2-locator]
+module = "org.glassfish.hk2:hk2-locator"
+version.ref = "hk2"
 
-[libraries.koin-annotations-ksp-compiler]
-module = "io.insert-koin:koin-ksp-compiler"
-version.ref = "koin-annotations"
+[libraries.hk2-metadata]
+module = "org.glassfish.hk2:hk2-metadata-generator"
+version.ref = "hk2"
+
+[libraries.hk2-extras]
+module = "org.glassfish.hk2:hk2-extras"
+version.ref = "hk2"
+
+[libraries.hk2]
+module = "org.glassfish.hk2:hk2"
+version.ref = "hk2"
+
+[libraries.javax-inject]
+module = "javax.inject:javax.inject"
+version.ref = "javax-inject"

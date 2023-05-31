@@ -11,7 +11,6 @@ plugins {
     kotlin("plugin.serialization") version libs.versions.kotlin
     id("com.github.johnrengelman.shadow") version libs.versions.plugins.shadow
     id("org.jetbrains.gradle.plugin.idea-ext") version libs.versions.plugins.idea.ext
-    id("com.google.devtools.ksp") version libs.versions.ksp
 }
 
 allprojects {
@@ -32,11 +31,11 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "com.github.johnrengelman.shadow")
     apply(plugin = "org.jetbrains.gradle.plugin.idea-ext")
-    apply(plugin = "com.google.devtools.ksp")
     apply(plugin = "maven-publish")
 
     dependencies {
         compileOnly(kotlin("stdlib"))
+        kapt(rootProject.libs.hk2.metadata)
     }
 
     kotlin {
@@ -48,10 +47,7 @@ subprojects {
         archiveFileName.set(
             "toolkit-${project.name}.jar"
         )
-    }
-
-    sourceSets.main {
-        java.srcDirs("build/generated/ksp/main/kotlin")
+        mergeServiceFiles()
     }
 
     tasks.withType<KotlinCompile> {
