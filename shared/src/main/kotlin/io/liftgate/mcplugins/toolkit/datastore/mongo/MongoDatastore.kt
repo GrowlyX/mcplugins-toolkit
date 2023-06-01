@@ -21,7 +21,7 @@ import java.util.logging.Logger
 
 /**
  * Configures and exports a [CoroutineDatabase] which can be used
- * to access respective Serializable model collections.
+ * to access respective collections for the respective [Serializable] model.
  *
  * @author GrowlyX
  * @since 5/31/2023

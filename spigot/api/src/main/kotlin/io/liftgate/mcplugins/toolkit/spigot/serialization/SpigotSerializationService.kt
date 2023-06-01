@@ -16,7 +16,7 @@ import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.serialization.registerModule
 
 /**
- * Registers [ConfigurationSerializable] types
+ * Binds [ConfigurationSerializable] serializers
  * to KMongo's shared SerializersModule.
  *
  * @author GrowlyX

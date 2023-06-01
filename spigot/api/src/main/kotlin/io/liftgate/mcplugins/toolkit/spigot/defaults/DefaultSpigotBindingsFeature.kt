@@ -11,11 +11,16 @@ import org.jvnet.hk2.annotations.Service
 @Service
 class DefaultSpigotBindingsFeature : CorePluginFeature
 {
-    override fun configure(plugin: ToolkitPluginContainer)
+    override fun preEnable(plugin: ToolkitPluginContainer)
     {
         bind(plugin) {
             bind(plugin.plugin)
-                .to(plugin.plugin.javaClass)
+                .apply {
+                    to(JavaPlugin::class.java)
+                    to(SuspendingJavaPlugin::class.java)
+                    to(ToolkitPlugin::class.java)
+                    to(plugin.plugin.javaClass)
+                }
         }
     }
 }

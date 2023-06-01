@@ -9,6 +9,9 @@ import org.bukkit.event.HandlerList
 import org.jvnet.hk2.annotations.Service
 
 /**
+ * A core plugin feature eagerly registring suspending
+ * events in [CoroutineListener]s.
+ * 
  * @author GrowlyX
  * @since 5/31/2023
  */

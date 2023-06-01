@@ -15,8 +15,7 @@ import org.jvnet.hk2.annotations.Service
 @Service
 class SpigotCommandsFeature : CorePluginFeature
 {
-    override fun lazy() = true
-    override fun configure(plugin: ToolkitPluginContainer)
+    override fun postEnable(plugin: ToolkitPluginContainer)
     {
         val mcPlugin = plugin.plugin as ToolkitSpigotPlugin
 
@@ -41,7 +40,7 @@ class SpigotCommandsFeature : CorePluginFeature
             }
     }
 
-    override fun disable(plugin: ToolkitPluginContainer)
+    override fun preDisable(plugin: ToolkitPluginContainer)
     {
         val commandManager = plugin.locator
             .getServiceNullable<PaperCommandManager>()

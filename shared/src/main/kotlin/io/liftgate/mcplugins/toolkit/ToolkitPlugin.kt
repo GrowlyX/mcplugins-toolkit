@@ -5,8 +5,8 @@ import org.glassfish.hk2.api.ServiceLocator
 import java.util.logging.Logger
 
 /**
- * Standard template full of information shared
- * across almost all plugin frameworks.
+ * Standard template full of information and generic lifecycle events 
+ * shared across almost all plugin frameworks.
  *
  * @author GrowlyX
  * @since 5/31/2023
@@ -22,8 +22,9 @@ interface ToolkitPlugin
     fun getLocator(): ServiceLocator
 
     /**
-     * Blocking plugin enable function that is called
-     * after [Eager] services are instantiated.
+     * Suspending plugin enable function that is called
+     * after [Eager] services are instantiated and the plugin's 
+     * main class is injected and post-constructed. 
      */
     open suspend fun enable()
     {
@@ -32,10 +33,11 @@ interface ToolkitPlugin
 
     /**
      * Blocking plugin disable function that is called
-     * after [Eager] services are instantiated.
+     * after services are disposed of.
      *
-     * asyncDispatcher & minecraftDispatcher are disposed
-     * at this point, so use Dispatchers.IO.
+     * NOTE: asyncDispatcher & minecraftDispatcher with suspending
+     * main classes are disposed at this point, so please use Dispatchers.IO if 
+     * running asynchronous tasks on shutdown.
      */
     open suspend fun disable()
     {

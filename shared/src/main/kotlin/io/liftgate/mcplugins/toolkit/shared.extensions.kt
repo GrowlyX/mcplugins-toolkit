@@ -3,8 +3,8 @@ package io.liftgate.mcplugins.toolkit
 import kotlinx.coroutines.runBlocking
 
 /**
- * @author GrowlyX
- * @since 5/31/2023
+ * Returns a filtered list of descriptors where the
+ * descriptor being filtered has qualifier of [T].
  */
 inline fun <reified T> ToolkitPluginContainer.getDescriptors() =
     locator

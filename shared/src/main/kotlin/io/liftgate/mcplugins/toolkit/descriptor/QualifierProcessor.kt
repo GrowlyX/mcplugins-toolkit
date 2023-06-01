@@ -5,8 +5,8 @@ import org.glassfish.hk2.utilities.DescriptorImpl
 import kotlin.reflect.KClass
 
 /**
- * A wrapper around [DescriptorProcessor] which only
- * processes descriptors with a specific qualifier.
+ * A wrapper around [DescriptorProcessor] which skips the 
+ * processing of descriptors that do not have the necassary qualifier.
  *
  * @author GrowlyX
  * @since 5/31/2023

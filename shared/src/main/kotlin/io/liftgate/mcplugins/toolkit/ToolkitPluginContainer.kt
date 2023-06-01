@@ -36,14 +36,23 @@ class ToolkitPluginContainer(
     fun onDisable()
     {
         CorePluginFeatures
-            .filter(CorePluginFeature::lazy)
             .forEach {
-                it.disable(this)
+                it.preDisable(this)
             }
 
         locator.shutdown()
         runBlocking {
             plugin.disable()
+        }
+    }
+
+    fun onLoad(): Boolean
+    {
+        // load descriptors onLoad prior to any 
+        // plugin enable lifecycle events 
+        if (!loadDescriptors())
+        {
+            return false
         }
     }
 
@@ -54,16 +63,12 @@ class ToolkitPluginContainer(
             .getAllServices<CorePluginFeature>()
 
         CorePluginFeatures
-            .filterNot(CorePluginFeature::lazy)
             .forEach {
-                it.configure(this)
+                it.preEnable(this)
             }
 
-        if (!loadDescriptors())
-        {
-            return false
-        }
-
+        // add exported services into our plugin-specific
+        // ServiceLocator via dcs
         val dcs = locator
             .getService<DynamicConfigurationService>()
         dcs.createDynamicConfiguration()
@@ -84,11 +89,11 @@ class ToolkitPluginContainer(
         // instantiate eager services on startup & inject the base plugin container
         locator.getAllServices(Eager::class.java)
         locator.inject(plugin)
+        locator.postConstruct(plugin)
 
         CorePluginFeatures
-            .filter(CorePluginFeature::lazy)
             .forEach {
-                it.configure(this)
+                it.postEnable(this)
             }
 
         return runBlockingUnsafe({

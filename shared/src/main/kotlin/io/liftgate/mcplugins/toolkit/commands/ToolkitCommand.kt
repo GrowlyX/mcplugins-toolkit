@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand
 import org.jvnet.hk2.annotations.Contract
 
 /**
- * Contract used for component scan of BaseCommands.
+ * Contract marking eagerly-loading [BaseCommand]s.
  *
  * @author GrowlyX
  * @since 5/31/2023

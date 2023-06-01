@@ -9,6 +9,7 @@ import org.jvnet.hk2.annotations.Service
 
 /**
  * Adds in plugin metadata to an exported service.
+ * TODO: add in softdepend functionality
  *
  * @author GrowlyX
  * @since 5/31/2023

@@ -6,6 +6,9 @@ import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import org.bukkit.Bukkit
 
 /**
+ * An implementation of [ToolkitPlugin] which implements 
+ * [SuspendingJavaPlugin], allowing for suspending Spigot services. 
+ * 
  * @author GrowlyX
  * @since 5/31/2023
  */
@@ -17,6 +20,13 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
     }
 
     override fun getLocator() = container.locator
+
+    override fun onLoad()
+    {
+        // Create plugin-specific ServiceLocator
+        // prior to any enable events being called
+        container
+    }
 
     override suspend fun onEnableAsync()
     {

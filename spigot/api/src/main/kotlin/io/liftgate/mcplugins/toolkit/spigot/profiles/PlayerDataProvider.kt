@@ -21,6 +21,12 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
+ * A lifecycle manager for user data
+ * for online players.
+ * 
+ * Data is cached as long as the player 
+ * is logged onto the server. 
+ * 
  * @author GrowlyX
  * @since 5/31/2023
  */
@@ -51,18 +57,20 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     }
 
     @EventHandler
-    suspend fun onPlayerPreLogin(event: AsyncPlayerPreLoginEvent)
+    fun onPlayerPreLogin(event: AsyncPlayerPreLoginEvent)
     {
-        val playerProfile = collection()
-            .findOne(
-                Filters.eq(
-                    "_id",
-                    event.uniqueId.toString()
+        runBlocking {
+            val playerProfile = collection()
+                .findOne(
+                    Filters.eq(
+                        "_id",
+                        event.uniqueId.toString()
+                    )
                 )
-            )
-            ?: createNew(event.uniqueId)
+                ?: createNew(event.uniqueId)
 
-        playerProfileCache[event.uniqueId] = playerProfile
+            playerProfileCache[event.uniqueId] = playerProfile
+        }
     }
 
     @EventHandler

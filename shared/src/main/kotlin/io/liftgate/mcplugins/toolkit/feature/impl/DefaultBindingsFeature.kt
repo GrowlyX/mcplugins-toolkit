@@ -14,7 +14,7 @@ import java.util.logging.Logger
 @Service
 class DefaultBindingsFeature : CorePluginFeature
 {
-    override fun configure(plugin: ToolkitPluginContainer)
+    override fun preEnable(plugin: ToolkitPluginContainer)
     {
         bind(plugin) {
             bind(plugin)
