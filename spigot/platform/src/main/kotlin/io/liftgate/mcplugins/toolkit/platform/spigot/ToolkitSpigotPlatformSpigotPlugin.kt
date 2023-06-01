@@ -1,6 +1,6 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot
 
-import io.liftgate.mcplugins.toolkit.spigot.ToolkitPlugin
+import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion
 import org.bukkit.plugin.java.annotation.plugin.Plugin
 import org.bukkit.plugin.java.annotation.plugin.author.Author
@@ -15,12 +15,12 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author
 )
 @Author("GrowlyX")
 @ApiVersion(ApiVersion.Target.v1_19)
-class ToolkitSpigotPlatformPlugin : ToolkitPlugin()
+class ToolkitSpigotPlatformSpigotPlugin : ToolkitSpigotPlugin()
 {
     companion object
     {
         @JvmStatic
-        lateinit var plugin: ToolkitSpigotPlatformPlugin
+        lateinit var plugin: ToolkitSpigotPlatformSpigotPlugin
     }
 
     override suspend fun enable()

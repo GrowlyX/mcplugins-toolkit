@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.spigot.serialization
 
+import io.liftgate.mcplugins.toolkit.contracts.Eager
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import org.bukkit.Color
@@ -15,11 +16,14 @@ import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.serialization.registerModule
 
 /**
+ * Registers [ConfigurationSerializable] types
+ * to KMongo's shared SerializersModule.
+ *
  * @author GrowlyX
  * @since 5/31/2023
  */
 @Service
-class SpigotSerializationService : PostConstruct
+class SpigotSerializationService : PostConstruct, Eager
 {
     override fun postConstruct()
     {

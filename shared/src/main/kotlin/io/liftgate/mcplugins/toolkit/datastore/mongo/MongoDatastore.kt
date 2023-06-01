@@ -2,7 +2,11 @@ package io.liftgate.mcplugins.toolkit.datastore.mongo
 
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
+import io.liftgate.mcplugins.toolkit.ToolkitPlugin
+import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
+import io.liftgate.mcplugins.toolkit.export.Export
+import io.liftgate.mcplugins.toolkit.runBlockingUnsafe
 import jakarta.inject.Inject
 import org.bson.UuidRepresentation
 import org.glassfish.hk2.api.PostConstruct
@@ -16,17 +20,24 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 /**
+ * Configures and exports a [CoroutineDatabase] which can be used
+ * to access respective Serializable model collections.
+ *
  * @author GrowlyX
  * @since 5/31/2023
  */
+@Export
 @Service
-class MongoDatastoreService : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>
+class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, Eager
 {
     @Inject
     lateinit var logger: Logger
 
     @Inject
     lateinit var config: MongoConfig
+
+    @Inject
+    lateinit var plugin: ToolkitPlugin
 
     private lateinit var client: CoroutineClient
     private lateinit var database: CoroutineDatabase
@@ -45,20 +56,23 @@ class MongoDatastoreService : PostConstruct, PreDestroy, Datastore<CoroutineData
             )
             .coroutine
 
-        database = client.getDatabase(config.database)
-        logger.info("Loaded mongo using database ${config.database}")
+        database = client
+            .getDatabase(config.database)
+
+        logger.info("Loaded mongo services with database ${config.database}")
     }
 
     override fun preDestroy()
     {
-        runCatching {
-            client.close()
-        }.onFailure {
+        runBlockingUnsafe({
             logger.log(
                 Level.SEVERE,
                 "Failed to close Mongo datastore",
                 it
             )
+        }) {
+            client.close()
+            logger.info("Disposed of mongo services")
         }
     }
 

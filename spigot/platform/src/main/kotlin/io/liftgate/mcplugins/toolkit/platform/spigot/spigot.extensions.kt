@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
  * @author GrowlyX
  * @since 5/31/2023
  */
-fun platform() = ToolkitSpigotPlatformPlugin.plugin
+fun platform() = ToolkitSpigotPlatformSpigotPlugin.plugin
 
 suspend fun runSync(
     runnable: suspend () -> Unit
