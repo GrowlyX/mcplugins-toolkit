@@ -10,16 +10,16 @@ import kotlinx.coroutines.withContext
  */
 fun platform() = ToolkitSpigotPlatformSpigotPlugin.plugin
 
-suspend fun runSync(
-    runnable: suspend () -> Unit
+suspend fun <T> runSync(
+    runnable: suspend () -> T
 ) = withContext(
     platform().minecraftDispatcher
 ) {
     runnable()
 }
 
-suspend fun runAsync(
-    runnable: suspend () -> Unit
+suspend fun <T> runAsync(
+    runnable: suspend () -> T
 ) = withContext(
     platform().asyncDispatcher
 ) {
