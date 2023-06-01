@@ -4,6 +4,7 @@ import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion
 import org.bukkit.plugin.java.annotation.plugin.Plugin
 import org.bukkit.plugin.java.annotation.plugin.author.Author
+import org.glassfish.hk2.api.ServiceLocator
 
 /**
  * @author GrowlyX

@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import org.bukkit.Bukkit
+import org.glassfish.hk2.api.ServiceLocator
 
 /**
  * @author GrowlyX
@@ -15,6 +16,8 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
     private val container by lazy {
         ToolkitPluginContainer(this)
     }
+
+    override fun getLocator() = container.locator
 
     override suspend fun onEnableAsync()
     {
