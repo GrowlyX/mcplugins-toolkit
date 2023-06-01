@@ -1,4 +1,5 @@
 dependencies {
+    compileOnly(libs.commands.core)
     api(libs.datastore.lettuce)
     api(libs.datastore.kmongo)
     api(libs.ktx.coroutines.core)

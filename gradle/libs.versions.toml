@@ -10,6 +10,7 @@ spigot-annotate = "1.2.3-SNAPSHOT"
 mccoroutine = "2.12.1"
 hk2 = "3.0.4"
 javax-inject = "1.1"
+commands = "0.5.1-SNAPSHOT"
 
 kotlin = "1.8.20"
 plugins-shadow = "7.1.2"
@@ -79,3 +80,11 @@ version.ref = "hk2"
 [libraries.javax-inject]
 module = "javax.inject:javax.inject"
 version.ref = "javax-inject"
+
+[libraries.commands-bukkit]
+module = "co.aikar:acf-paper"
+version.ref = "commands"
+
+[libraries.commands-core]
+module = "co.aikar:acf-core"
+version.ref = "commands"

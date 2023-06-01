@@ -35,6 +35,12 @@ class ToolkitPluginContainer(
 
     fun onDisable()
     {
+        CorePluginFeatures
+            .filter(CorePluginFeature::lazy)
+            .forEach {
+                it.disable(this)
+            }
+
         locator.shutdown()
         runBlocking {
             plugin.disable()
@@ -47,9 +53,11 @@ class ToolkitPluginContainer(
         CorePluginFeatures += locator
             .getAllServices<CorePluginFeature>()
 
-        CorePluginFeatures.forEach {
-            it.configure(this)
-        }
+        CorePluginFeatures
+            .filterNot(CorePluginFeature::lazy)
+            .forEach {
+                it.configure(this)
+            }
 
         if (!loadDescriptors())
         {
@@ -76,6 +84,12 @@ class ToolkitPluginContainer(
         // instantiate eager services on startup & inject the base plugin container
         locator.getAllServices(Eager::class.java)
         locator.inject(plugin)
+
+        CorePluginFeatures
+            .filter(CorePluginFeature::lazy)
+            .forEach {
+                it.configure(this)
+            }
 
         return runBlockingUnsafe({
             plugin.getLogger().log(

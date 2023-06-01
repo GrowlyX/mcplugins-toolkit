@@ -22,6 +22,9 @@ allprojects {
         maven {
             url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         }
+        maven {
+            url = uri("https://repo.aikar.co/content/groups/aikar/")
+        }
     }
 }
 

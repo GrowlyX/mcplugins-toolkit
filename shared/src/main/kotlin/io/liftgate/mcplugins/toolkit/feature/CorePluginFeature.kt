@@ -14,7 +14,10 @@ import org.jvnet.hk2.annotations.Contract
 @Contract
 interface CorePluginFeature
 {
+    fun lazy(): Boolean = false
+
     fun configure(plugin: ToolkitPluginContainer)
+    fun disable(plugin: ToolkitPluginContainer)
 
     fun bind(
         plugin: ToolkitPluginContainer,
