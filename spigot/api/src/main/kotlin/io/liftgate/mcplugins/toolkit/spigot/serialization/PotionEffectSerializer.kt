@@ -36,7 +36,7 @@ class PotionEffectSerializer : Serializer<PotionEffect>()
             PotionEffect(id, duration, amplifier, ambient)
         }
 
-    override fun serialize(encoder: Encoder, value: Vector)
+    override fun serialize(encoder: Encoder, value: PotionEffect)
     {
         encoder.encodeSerializableValue(
             PotionEffectSurrogate.serializer(),
