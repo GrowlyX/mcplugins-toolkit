@@ -9,17 +9,16 @@ import org.bukkit.event.HandlerList
 import org.jvnet.hk2.annotations.Service
 
 /**
- * A core plugin feature eagerly registring suspending
+ * A core plugin feature eagerly registering suspending
  * events in [CoroutineListener]s.
- * 
+ *
  * @author GrowlyX
  * @since 5/31/2023
  */
 @Service
 class SpigotListenersFeature : CorePluginFeature
 {
-    override fun lazy() = true
-    override fun configure(plugin: ToolkitPluginContainer)
+    override fun postEnable(plugin: ToolkitPluginContainer)
     {
         val mcPlugin = plugin.plugin as ToolkitSpigotPlugin
 
@@ -32,7 +31,7 @@ class SpigotListenersFeature : CorePluginFeature
         }
     }
 
-    override fun disable(plugin: ToolkitPluginContainer)
+    override fun preDisable(plugin: ToolkitPluginContainer)
     {
         val listeners = plugin.locator
             .getAllServices<CoroutineListener>()

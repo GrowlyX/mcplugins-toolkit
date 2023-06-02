@@ -16,9 +16,6 @@ class DefaultSpigotBindingsFeature : CorePluginFeature
         bind(plugin) {
             bind(plugin.plugin)
                 .apply {
-                    to(JavaPlugin::class.java)
-                    to(SuspendingJavaPlugin::class.java)
-                    to(ToolkitPlugin::class.java)
                     to(plugin.plugin.javaClass)
                 }
         }

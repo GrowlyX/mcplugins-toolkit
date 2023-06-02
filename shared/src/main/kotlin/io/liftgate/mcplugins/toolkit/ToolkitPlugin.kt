@@ -2,10 +2,11 @@ package io.liftgate.mcplugins.toolkit
 
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import org.glassfish.hk2.api.ServiceLocator
+import java.io.File
 import java.util.logging.Logger
 
 /**
- * Standard template full of information and generic lifecycle events 
+ * Standard template full of information and generic lifecycle events
  * shared across almost all plugin frameworks.
  *
  * @author GrowlyX
@@ -16,6 +17,8 @@ interface ToolkitPlugin
     fun getName(): String
     fun getLogger(): Logger
 
+    fun getDataFolder(): File
+
     fun getDependencies(): List<String>
     fun getSoftDependencies(): List<String>
 
@@ -23,10 +26,10 @@ interface ToolkitPlugin
 
     /**
      * Suspending plugin enable function that is called
-     * after [Eager] services are instantiated and the plugin's 
-     * main class is injected and post-constructed. 
+     * after [Eager] services are instantiated and the plugin's
+     * main class is injected and post-constructed.
      */
-    open suspend fun enable()
+    suspend fun enable()
     {
 
     }
@@ -36,7 +39,7 @@ interface ToolkitPlugin
      * after services are disposed of.
      *
      * NOTE: asyncDispatcher & minecraftDispatcher with suspending
-     * main classes are disposed at this point, so please use Dispatchers.IO if 
+     * main classes are disposed at this point, so please use Dispatchers.IO if
      * running asynchronous tasks on shutdown.
      */
     open suspend fun disable()

@@ -48,12 +48,9 @@ class ToolkitPluginContainer(
 
     fun onLoad(): Boolean
     {
-        // load descriptors onLoad prior to any 
-        // plugin enable lifecycle events 
-        if (!loadDescriptors())
-        {
-            return false
-        }
+        // load descriptors onLoad prior to any
+        // plugin enable lifecycle events
+        return loadDescriptors()
     }
 
     fun onEnable(): Boolean
@@ -104,6 +101,7 @@ class ToolkitPluginContainer(
             )
         }) {
             plugin.enable()
+            ToolkitPluginRegistry.add(plugin)
         }
     }
 
