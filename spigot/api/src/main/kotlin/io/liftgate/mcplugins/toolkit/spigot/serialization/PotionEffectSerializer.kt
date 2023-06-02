@@ -4,10 +4,8 @@ import io.liftgate.mcplugins.toolkit.serialization.Serializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.*
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.jvnet.hk2.annotations.Service
 
 /**
@@ -27,7 +25,7 @@ class PotionEffectSerializer : Serializer<PotionEffect>()
         val ambient: Boolean
     )
 
-    override fun type() = Vector::class
+    override fun type() = PotionEffect::class
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun deserialize(decoder: Decoder) = decoder
@@ -41,9 +39,9 @@ class PotionEffectSerializer : Serializer<PotionEffect>()
     override fun serialize(encoder: Encoder, value: Vector)
     {
         encoder.encodeSerializableValue(
-            PotionEffectSurrogate.serializer(), 
+            PotionEffectSurrogate.serializer(),
             PotionEffectSurrogate(
-                value.type.id, 
+                value.type.id,
                 value.duration,
                 value.amplifier,
                 value.ambient
