@@ -35,10 +35,10 @@ class ItemStackSerializer : Serializer<ItemStack>()
         )
         .let {
             ItemStack(
-                Material.getMaterial(it.id) ?: throw IllegalStateException(
-                    "Material by ID ${it.id} does not exist"
-                ),
-
+                Material.getMaterial(it.id)
+                    ?: throw IllegalStateException(
+                        "Material by ID ${it.id} does not exist"
+                    ),
                 it.amount, it.durability
             )
         }
