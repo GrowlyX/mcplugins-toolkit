@@ -1,11 +1,8 @@
 package io.liftgate.mcplugins.toolkit.serialization
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import org.jvnet.hk2.annotations.Contract
 import kotlin.reflect.KClass
-import kotlin.reflect.jvm.jvmName
 
 /**
  * Contract marking any custom KSerializers needing to be

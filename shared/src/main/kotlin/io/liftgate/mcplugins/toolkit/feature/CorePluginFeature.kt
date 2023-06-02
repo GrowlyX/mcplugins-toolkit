@@ -16,8 +16,6 @@ import org.jvnet.hk2.annotations.Contract
 @Contract
 interface CorePluginFeature
 {
-    fun rank() = 0
-
     fun preEnable(plugin: ToolkitPluginContainer)
     {
 
