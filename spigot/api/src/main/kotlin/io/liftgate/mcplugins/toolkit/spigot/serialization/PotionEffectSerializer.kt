@@ -2,6 +2,7 @@ package io.liftgate.mcplugins.toolkit.spigot.serialization
 
 import io.liftgate.mcplugins.toolkit.serialization.Serializer
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
@@ -20,6 +21,7 @@ class PotionEffectSerializer : Serializer<PotionEffect>()
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("org.bukkit.potion.PotionEffect")
 
+    @Serializable
     data class PotionEffectSurrogate(
         val id: Int,
         val duration: Int,
@@ -27,26 +29,31 @@ class PotionEffectSerializer : Serializer<PotionEffect>()
         val ambient: Boolean
     )
 
-    override fun type() = Vector::class
+    override fun type() = PotionEffect::class
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun deserialize(decoder: Decoder) = decoder
         .decodeSerializableValue(
             PotionEffectSurrogate.serializer()
         )
-        .apply {
-            PotionEffect(id, duration, amplifier, ambient)
+        .let {
+            PotionEffect(
+                PotionEffectType.getById(it.id)
+                    ?: throw IllegalStateException(
+                        "PotionEffectType by ID ${it.id} does not exist"
+                    ),
+                it.duration, it.amplifier, it.ambient
+            )
         }
 
-    override fun serialize(encoder: Encoder, value: Vector)
+    override fun serialize(encoder: Encoder, value: PotionEffect)
     {
         encoder.encodeSerializableValue(
-            PotionEffectSurrogate.serializer(), 
+            PotionEffectSurrogate.serializer(),
             PotionEffectSurrogate(
-                value.type.id, 
+                value.type.id,
                 value.duration,
                 value.amplifier,
-                value.ambient
+                value.isAmbient
             )
         )
     }
