@@ -1,12 +1,13 @@
 package io.liftgate.mcplugins.toolkit.spigot.serialization
 
 import io.liftgate.mcplugins.toolkit.serialization.Serializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
-import kotlinx.serialization.encoding.*
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.jvnet.hk2.annotations.Service
 
 /**
