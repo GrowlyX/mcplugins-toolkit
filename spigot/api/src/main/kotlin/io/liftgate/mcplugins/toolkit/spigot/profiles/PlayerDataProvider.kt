@@ -7,6 +7,7 @@ import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -23,10 +24,10 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * A lifecycle manager for user data
  * for online players.
- * 
- * Data is cached as long as the player 
- * is logged onto the server. 
- * 
+ *
+ * Data is cached as long as the player
+ * is logged onto the server.
+ *
  * @author GrowlyX
  * @since 5/31/2023
  */
