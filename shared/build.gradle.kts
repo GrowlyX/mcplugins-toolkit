@@ -8,6 +8,11 @@ dependencies {
     api(libs.ktx.serialization.yaml)
     api(libs.ktx.datetime)
 
+    api(libs.ktor.client.core)
+    api(libs.ktor.client.engine)
+    api(libs.ktor.client.serialization)
+    api(libs.ktor.client.serialization.core)
+
     api(libs.hk2.extras)
     api(libs.hk2.locator)
 }

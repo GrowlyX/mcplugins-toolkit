@@ -1,17 +1,16 @@
 package io.liftgate.mcplugins.toolkit.profile
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import java.util.*
 
 /**
+ * API response from Mojang's sessionserver
+ * and api endpoints.
+ *
  * @author GrowlyX
  * @since 6/1/2023
  */
 @Serializable
 data class MojangPlayerProfile(
-    @BsonId
-    val uniqueId: @Contextual UUID,
+    val id: String,
     var username: String
 )
