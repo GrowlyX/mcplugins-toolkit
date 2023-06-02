@@ -15,7 +15,7 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/1/2023
  */
 @Service
-object WorldSerializer : Serializer<World>()
+class WorldSerializer : Serializer<World>()
 {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("org.bukkit.World", PrimitiveKind.STRING)

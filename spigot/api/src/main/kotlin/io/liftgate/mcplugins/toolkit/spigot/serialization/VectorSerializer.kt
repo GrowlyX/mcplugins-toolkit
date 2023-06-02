@@ -14,7 +14,7 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/1/2023
  */
 @Service
-object VectorSerializer : Serializer<Vector>()
+class VectorSerializer : Serializer<Vector>()
 {
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("org.bukkit.util.Vector") {
@@ -57,5 +57,6 @@ object VectorSerializer : Serializer<Vector>()
             encodeDoubleElement(descriptor, 0, value.x)
             encodeDoubleElement(descriptor, 1, value.y)
             encodeDoubleElement(descriptor, 2, value.z)
+            endStructure(descriptor)
         }
 }

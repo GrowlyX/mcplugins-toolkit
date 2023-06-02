@@ -15,7 +15,7 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/1/2023
  */
 @Service
-object LocationSerializer : Serializer<Location>()
+class LocationSerializer : Serializer<Location>()
 {
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("org.bukkit.Location") {
@@ -93,5 +93,6 @@ object LocationSerializer : Serializer<Location>()
                         "World is not loaded"
                     )
             )
+            endStructure(descriptor)
         }
 }
