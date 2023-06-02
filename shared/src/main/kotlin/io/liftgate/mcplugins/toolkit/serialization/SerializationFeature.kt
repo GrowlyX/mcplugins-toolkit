@@ -14,6 +14,7 @@ import org.litote.kmongo.serialization.registerModule
 @Service
 class SerializationFeature : CorePluginFeature
 {
+    override fun rank() = 100
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
         val serializers = plugin.locator

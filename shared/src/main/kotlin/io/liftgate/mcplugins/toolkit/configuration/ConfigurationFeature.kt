@@ -24,7 +24,6 @@ class ConfigurationFeature : CorePluginFeature
 
         bind(plugin) {
             bind(Yaml(
-                // TODO: Ensure bukkit has populated at this point
                 serializersModule = kmongoSerializationModule
             )).to(
                 Yaml::class.java

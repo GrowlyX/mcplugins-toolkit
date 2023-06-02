@@ -35,7 +35,7 @@ class ToolkitPluginContainer(
 
     fun onDisable()
     {
-        CorePluginFeatures
+        rankedCoreServices()
             .forEach {
                 it.preDisable(this)
             }
@@ -53,13 +53,16 @@ class ToolkitPluginContainer(
         return loadDescriptors()
     }
 
+    private fun rankedCoreServices() = CorePluginFeatures
+        .sortedByDescending(CorePluginFeature::rank)
+
     fun onEnable(): Boolean
     {
         // add local core features (if there are any)
         CorePluginFeatures += locator
             .getAllServices<CorePluginFeature>()
 
-        CorePluginFeatures
+        rankedCoreServices()
             .forEach {
                 it.preEnable(this)
             }
@@ -88,7 +91,7 @@ class ToolkitPluginContainer(
         locator.inject(plugin)
         locator.postConstruct(plugin)
 
-        CorePluginFeatures
+        rankedCoreServices()
             .forEach {
                 it.postEnable(this)
             }
