@@ -18,81 +18,44 @@ import org.jvnet.hk2.annotations.Service
 class LocationSerializer : Serializer<Location>()
 {
     override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("org.bukkit.Location") {
-            element<Double>("x")
-            element<Double>("y")
-            element<Double>("z")
-            element<Float>("yaw")
-            element<Float>("pitch")
-            element<String>("world")
-        }
+        buildClassSerialDescriptor("org.bukkit.Location")
+
+    data class LocationSurrogate(
+        val x: Double, val y: Double, val z: Double,
+        val yaw: Float, val pitch: Float,
+        val world: String
+    )
 
     override fun type() = Location::class
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun deserialize(decoder: Decoder) = decoder
-        .decodeStructure(descriptor) {
-            var world: String? = null
-            var x = 0.0
-            var y = 0.0
-            var z = 0.0
-            var yaw = 0.0f
-            var pitch = 0.0f
-
-            if (decodeSequentially()) // sequential decoding protocol
-            {
-                x = decodeDoubleElement(descriptor, 0)
-                y = decodeDoubleElement(descriptor, 1)
-                z = decodeDoubleElement(descriptor, 2)
-                yaw = decodeFloatElement(descriptor, 3)
-                pitch = decodeFloatElement(descriptor, 4)
-                world = decodeStringElement(descriptor, 5)
-            } else while (true)
-            {
-                when (val index = decodeElementIndex(descriptor))
-                {
-                    0 -> x = decodeDoubleElement(descriptor, 0)
-                    1 -> y = decodeDoubleElement(descriptor, 1)
-                    2 -> z = decodeDoubleElement(descriptor, 2)
-                    3 -> yaw = decodeFloatElement(descriptor, 3)
-                    4 -> pitch = decodeFloatElement(descriptor, 4)
-                    5 -> world = decodeStringElement(descriptor, 5)
-                    CompositeDecoder.DECODE_DONE -> break
-                    else -> error("Unexpected index: $index")
-                }
-            }
-
+        .decodeSerializableValue(
+            LocationSurrogate.serializer()
+        )
+        .apply {
             Location(
-                Bukkit
-                    .getWorld(
-                        world
-                            ?: throw IllegalStateException(
-                                "World was not decoded properly"
-                            )
-                    )
+                x, y, z, 
+                yaw, pitch,
+                Bukkit.getWorld(world)
                     ?: throw IllegalStateException(
-                        "World $world is not loaded on this server"
-                    ),
-                x, y, z, yaw, pitch
+                        "World was not decoded properly"
+                    )
             )
         }
 
-    override fun serialize(encoder: Encoder, value: Location) =
-        encoder.encodeStructure(descriptor) {
-            encodeDoubleElement(descriptor, 0, value.x)
-            encodeDoubleElement(descriptor, 1, value.y)
-            encodeDoubleElement(descriptor, 2, value.z)
-
-            encodeFloatElement(descriptor, 3, value.yaw)
-            encodeFloatElement(descriptor, 4, value.pitch)
-
-            encodeStringElement(
-                descriptor, 5,
+    override fun serialize(encoder: Encoder, value: Location)
+    {
+        encoder.encodeSerializableValue(
+            LocationSurrogate.serializer(), 
+            LocationSurrogate(
+                value.x, value.y, value.z,
+                value.yaw, value.pitch,
                 value.world?.name
                     ?: throw IllegalStateException(
-                        "World is not loaded"
+                        "World is not loaded, cannot serialize world name from WorldInfo"
                     )
             )
-            endStructure(descriptor)
-        }
+        )
+    }
 }

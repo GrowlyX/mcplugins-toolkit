@@ -17,46 +17,28 @@ import org.jvnet.hk2.annotations.Service
 class VectorSerializer : Serializer<Vector>()
 {
     override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("org.bukkit.util.Vector") {
-            element<Double>("x")
-            element<Double>("y")
-            element<Double>("z")
-        }
+        buildClassSerialDescriptor("org.bukkit.util.Vector")
+
+    data class VectorSurrogate(
+        val x: Double, val y: Double, val z: Double
+    )
 
     override fun type() = Vector::class
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun deserialize(decoder: Decoder) = decoder
-        .decodeStructure(descriptor) {
-            var x = 0.0
-            var y = 0.0
-            var z = 0.0
-
-            if (decodeSequentially()) // sequential decoding protocol
-            {
-                x = decodeDoubleElement(descriptor, 0)
-                y = decodeDoubleElement(descriptor, 1)
-                z = decodeDoubleElement(descriptor, 2)
-            } else while (true)
-            {
-                when (val index = decodeElementIndex(descriptor))
-                {
-                    0 -> x = decodeDoubleElement(descriptor, 0)
-                    1 -> y = decodeDoubleElement(descriptor, 1)
-                    2 -> z = decodeDoubleElement(descriptor, 2)
-                    CompositeDecoder.DECODE_DONE -> break
-                    else -> error("Unexpected index: $index")
-                }
-            }
-
+        .decodeSerializableValue(
+            VectorSurrogate.serializer()
+        )
+        .apply {
             Vector(x, y, z)
         }
 
-    override fun serialize(encoder: Encoder, value: Vector) =
-        encoder.encodeStructure(descriptor) {
-            encodeDoubleElement(descriptor, 0, value.x)
-            encodeDoubleElement(descriptor, 1, value.y)
-            encodeDoubleElement(descriptor, 2, value.z)
-            endStructure(descriptor)
-        }
+    override fun serialize(encoder: Encoder, value: Vector)
+    {
+        encoder.encodeSerializableValue(
+            VectorSurrogate.serializer(), 
+            VectorSurrogate(value.x, value.y, value.z)
+        )
+    }
 }
