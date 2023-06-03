@@ -6,6 +6,7 @@ import org.jetbrains.gradle.ext.Gradle
 
 plugins {
     `maven-publish`
+    `java`
     kotlin("jvm") version libs.versions.kotlin
     kotlin("kapt") version libs.versions.kotlin
     kotlin("plugin.serialization") version libs.versions.kotlin
@@ -51,24 +52,18 @@ subprojects {
             "toolkit-${project.name}.jar"
         )
 
-        mergeServiceFiles {
-            setPath("hk2-metadata")
-            include("default")
-        }
-    }
-
-    kapt {
-        arguments {
-            arg(
-                "org.glassfish.hk2.metadata.location",
-                "hk2-metadata/default"
-            )
-        }
+        append("META-INF/hk2-locator/default")
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.javaParameters = true
         kotlinOptions.jvmTarget = "17"
+    }
+
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.add("-parameters")
+        options.fork()
+        options.encoding = "UTF-8"
     }
 
     publishing {

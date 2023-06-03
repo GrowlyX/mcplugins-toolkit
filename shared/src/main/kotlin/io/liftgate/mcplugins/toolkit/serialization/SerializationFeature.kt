@@ -5,6 +5,7 @@ import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import kotlinx.serialization.modules.SerializersModule
 import org.jvnet.hk2.annotations.Service
+import org.litote.kmongo.serialization.SerializationClassMappingTypeService
 import org.litote.kmongo.serialization.registerModule
 
 /**
@@ -14,9 +15,15 @@ import org.litote.kmongo.serialization.registerModule
 @Service
 class SerializationFeature : CorePluginFeature
 {
-    override fun rank() = 100
+    override fun rank() = 10
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
+        // set mapping service to serialization before using KMongo's serialization module
+        System.setProperty(
+            "org.litote.mongo.mapping.service",
+            SerializationClassMappingTypeService::class.qualifiedName!!
+        )
+
         val serializers = plugin.locator
             .getAllServices<Serializer<*>>()
 

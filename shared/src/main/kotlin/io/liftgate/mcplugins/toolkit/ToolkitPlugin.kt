@@ -18,6 +18,7 @@ interface ToolkitPlugin
     fun getLogger(): Logger
 
     fun getDataFolder(): File
+    fun getClassLoaderPublic(): ClassLoader
 
     fun getDependencies(): List<String>
     fun getSoftDependencies(): List<String>

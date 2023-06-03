@@ -12,7 +12,9 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
+import org.litote.kmongo.ascending
 import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.descending
 import org.litote.kmongo.eq
 import java.util.*
 import java.util.logging.Logger
@@ -67,10 +69,17 @@ class StoredPlayerProfileManager : Eager, PostConstruct
 
         runBlocking {
             collection.createIndex(
-                "_id",
+                ascending(
+                    StoredPlayerProfile::uniqueId
+                ),
                 IndexOptions().unique(true)
             )
-            collection.createIndex("username")
+
+            collection.createIndex(
+                ascending(
+                    StoredPlayerProfile::username
+                )
+            )
 
             logger.info(
                 "Created StoredPlayerProfileManager collection indexes"

@@ -7,6 +7,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.bukkit.Color
+import org.glassfish.hk2.api.Rank
 import org.jvnet.hk2.annotations.Service
 
 /**
@@ -14,6 +15,7 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/1/2023
  */
 @Service
+@Rank(10)
 class ColorSerializer : Serializer<Color>()
 {
     override val descriptor: SerialDescriptor =

@@ -11,6 +11,7 @@ import jakarta.inject.Inject
 import org.bson.UuidRepresentation
 import org.glassfish.hk2.api.PostConstruct
 import org.glassfish.hk2.api.PreDestroy
+import org.glassfish.hk2.api.Rank
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -45,11 +46,6 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
 
     override fun postConstruct()
     {
-        System.setProperty(
-            "org.litote.mongo.mapping.service",
-            SerializationClassMappingTypeService::class.qualifiedName!!
-        )
-
         client = KMongo
             .createClient(
                 MongoClientSettings

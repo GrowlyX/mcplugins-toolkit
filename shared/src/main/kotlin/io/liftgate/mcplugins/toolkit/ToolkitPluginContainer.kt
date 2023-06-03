@@ -13,7 +13,6 @@ import org.glassfish.hk2.api.DynamicConfigurationService
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.hk2.api.ServiceLocatorFactory
 import org.glassfish.hk2.utilities.ClasspathDescriptorFileFinder
-import org.glassfish.hk2.utilities.ServiceLocatorUtilities
 import org.jvnet.hk2.annotations.Contract
 import java.io.IOException
 import java.util.logging.Level
@@ -118,8 +117,7 @@ class ToolkitPluginContainer(
         {
             dcs.populator.populate(
                 ClasspathDescriptorFileFinder(
-                    "hk2-metadata/",
-                    this::class.java.classLoader
+                    plugin::class.java.classLoader
                 ),
                 *processors.toTypedArray()
             )

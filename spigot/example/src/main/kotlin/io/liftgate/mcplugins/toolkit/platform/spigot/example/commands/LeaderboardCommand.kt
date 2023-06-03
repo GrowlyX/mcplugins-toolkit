@@ -3,7 +3,6 @@ package io.liftgate.mcplugins.toolkit.platform.spigot.example.commands
 import co.aikar.commands.annotation.CommandAlias
 import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.model.PlayerDataManager
-import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
 import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.bukkit.ChatColor
@@ -25,14 +24,10 @@ class LeaderboardCommand : ToolkitCommand()
         runBlocking {
             sender.sendMessage("=== Top 10 deaths ===")
 
-            runAsync {
-                manager.aggregateTop10KillsEntries()
-                    .forEachIndexed { index, result ->
-                        sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
-                    }
-
-                sender.sendMessage("[runAsync] on ${Thread.currentThread().name}")
-            }
+            manager.aggregateTop10KillsEntries()
+                .forEachIndexed { index, result ->
+                    sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
+                }
 
             sender.sendMessage("[runBlocking] on ${Thread.currentThread().name}")
         }
