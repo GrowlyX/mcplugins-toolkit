@@ -25,8 +25,6 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
 
     override fun onLoad()
     {
-        mcCoroutineConfiguration.shutdownStrategy = ShutdownStrategy.MANUAL
-
         // Create plugin-specific ServiceLocator
         // prior to any enable events being called
         if (!container.onLoad())
@@ -39,9 +37,12 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
 
     override suspend fun onEnableAsync()
     {
+        mcCoroutineConfiguration.shutdownStrategy = ShutdownStrategy.MANUAL
+
         // something did not go well during startup
         if (!container.onEnable())
         {
+            logger.info("Failed to load plugin, disabling")
             Bukkit.getPluginManager()
                 .disablePlugin(this)
             return

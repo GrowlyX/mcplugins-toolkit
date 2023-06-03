@@ -26,5 +26,5 @@ fun runBlockingUnsafe(
             exceptionCaught(it)
         }
 
-        enable.isFailure
+        enable.isSuccess
     }
