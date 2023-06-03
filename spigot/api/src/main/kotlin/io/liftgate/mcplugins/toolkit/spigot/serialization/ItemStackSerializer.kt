@@ -47,7 +47,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
     sealed class SpecificItemMetaSurrogate
     {
         @Serializable
-        data class Leather(val color: Int) : SpecificItemMetaSurrogate()
+        data class Leather(val color: @Contextual Color) : SpecificItemMetaSurrogate()
 
         @Serializable
         data class Skull(val owner: String?) : SpecificItemMetaSurrogate()
@@ -107,9 +107,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
                         is LeatherArmorMeta ->
                         {
                             val leather = specific as SpecificItemMetaSurrogate.Leather
-                            itemMeta.setColor(
-                                Color.fromRGB(leather.color)
-                            )
+                            itemMeta.setColor(leather.color)
                         }
 
                         is SkullMeta ->
@@ -170,7 +168,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
             when (val itemMeta = value.itemMeta)
             {
                 is LeatherArmorMeta -> SpecificItemMetaSurrogate.Leather(
-                    color = itemMeta.color.asRGB()
+                    color = itemMeta.color
                 )
 
                 is SkullMeta -> SpecificItemMetaSurrogate.Skull(
