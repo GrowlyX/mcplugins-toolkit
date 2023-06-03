@@ -50,7 +50,20 @@ subprojects {
         archiveFileName.set(
             "toolkit-${project.name}.jar"
         )
-        mergeServiceFiles()
+
+        mergeServiceFiles {
+            setPath("hk2-metadata")
+            include("default")
+        }
+    }
+
+    kapt {
+        arguments {
+            arg(
+                "org.glassfish.hk2.metadata.location",
+                "hk2-metadata/default"
+            )
+        }
     }
 
     tasks.withType<KotlinCompile> {
