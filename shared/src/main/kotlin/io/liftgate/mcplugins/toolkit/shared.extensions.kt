@@ -1,6 +1,9 @@
 package io.liftgate.mcplugins.toolkit
 
+import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
 import kotlinx.coroutines.runBlocking
+import org.glassfish.hk2.utilities.binding.ScopedBindingBuilder
+import kotlin.reflect.KClass
 
 /**
  * Returns a filtered list of descriptors where the
@@ -28,3 +31,15 @@ fun runBlockingUnsafe(
 
         enable.isSuccess
     }
+
+fun <T : Any> ScopedBindingBuilder<T>.bindTo(
+    vararg kClasses: KClass<in T>
+) = apply {
+    BindingBuilderUtilities
+        .bindTo(
+            this,
+            *kClasses
+                .map { it.java }
+                .toTypedArray()
+        )
+}

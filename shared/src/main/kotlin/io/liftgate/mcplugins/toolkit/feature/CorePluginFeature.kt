@@ -33,7 +33,7 @@ interface CorePluginFeature
 
     }
 
-    fun bind(
+    fun pluginBinder(
         plugin: ToolkitPluginContainer,
         binder: AbstractBinder.() -> Unit
     )

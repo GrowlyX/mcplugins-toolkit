@@ -23,7 +23,7 @@ class SpigotCommandsFeature : CorePluginFeature
         val manager = ToolkitCommandManager(mcPlugin)
         manager.registerDefaults()
 
-        bind(plugin) {
+        pluginBinder(plugin) {
             bind(manager)
                 .to(manager.javaClass)
         }

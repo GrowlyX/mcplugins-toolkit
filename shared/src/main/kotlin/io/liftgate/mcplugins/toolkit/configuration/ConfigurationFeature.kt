@@ -19,7 +19,7 @@ class ConfigurationFeature : CorePluginFeature
 {
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
-        bind(plugin) {
+        pluginBinder(plugin) {
             bind(Yaml(
                 serializersModule = kmongoSerializationModule,
                 configuration = YamlConfiguration(
@@ -44,7 +44,7 @@ class ConfigurationFeature : CorePluginFeature
             .getAllServices<Configuration<*>>()
 
         configurations.forEach { config ->
-            bind(plugin) {
+            pluginBinder(plugin) {
                 bind(
                     config.load()
                 ).apply {
