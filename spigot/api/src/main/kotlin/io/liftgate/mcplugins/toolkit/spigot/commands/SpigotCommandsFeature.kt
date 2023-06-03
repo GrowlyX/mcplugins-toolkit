@@ -6,6 +6,7 @@ import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getServiceNullable
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
+import io.liftgate.mcplugins.toolkit.spigot.commands.manager.ToolkitCommandManager
 import org.jvnet.hk2.annotations.Service
 
 /**
@@ -19,8 +20,8 @@ class SpigotCommandsFeature : CorePluginFeature
     {
         val mcPlugin = plugin.plugin as ToolkitSpigotPlugin
 
-        val manager = PaperCommandManager(mcPlugin)
-        manager.enableUnstableAPI("help")
+        val manager = ToolkitCommandManager(mcPlugin)
+        manager.registerDefaults()
 
         bind(plugin) {
             bind(manager)
