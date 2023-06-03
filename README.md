@@ -4,6 +4,7 @@ Kotlin Minecraft plugin development toolkit.
 ## Features:
  - Service management & DI ([HK2](https://javaee.github.io/hk2/introduction.html)) 
    - Auto-scanning of @Service classes at compile-time
+   - Version-based service registration
    - Automatic listener registration (implementing CoroutineListener)
    - Automatic command registration (implementing ToolkitCommand)
    - Automatic config file registration (implementing Configuration)
