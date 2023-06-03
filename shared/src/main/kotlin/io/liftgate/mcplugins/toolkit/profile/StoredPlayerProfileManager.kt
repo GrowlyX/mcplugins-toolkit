@@ -71,13 +71,6 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         runBlocking {
             collection.createIndex(
                 ascending(
-                    StoredPlayerProfile::uniqueId
-                ),
-                IndexOptions().unique(true)
-            )
-
-            collection.createIndex(
-                ascending(
                     StoredPlayerProfile::username
                 )
             )

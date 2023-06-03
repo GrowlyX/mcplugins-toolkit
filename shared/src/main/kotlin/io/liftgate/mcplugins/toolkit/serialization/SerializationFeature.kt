@@ -43,7 +43,6 @@ class SerializationFeature : CorePluginFeature
 
         bind(plugin) {
             val json = Json {
-                explicitNulls = true
                 encodeDefaults = true
                 ignoreUnknownKeys = true
                 serializersModule = kmongoSerializationModule

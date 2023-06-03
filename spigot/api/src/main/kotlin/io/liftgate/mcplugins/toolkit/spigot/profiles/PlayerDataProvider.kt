@@ -7,6 +7,7 @@ import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.bukkit.ChatColor
@@ -109,7 +110,7 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
 
     suspend fun save(profile: T)
     {
-        withContext(plugin.asyncDispatcher) {
+        withContext(Dispatchers.IO) {
             collection().save(profile)
         }
     }

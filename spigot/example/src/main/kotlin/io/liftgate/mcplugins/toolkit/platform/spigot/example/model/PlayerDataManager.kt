@@ -54,19 +54,17 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
     )
 
     suspend fun aggregateTop10KillsEntries() =
-        runAsync {
-            collection
-                .aggregate<Top10Result>(
-                    sort(
-                        descending(PlayerDataModel::deaths)
-                    ),
-                    limit(10),
-                    project(
-                        Top10Result::uniqueId from PlayerDataModel::uniqueId,
-                        Top10Result::username from PlayerDataModel::username,
-                        Top10Result::value from PlayerDataModel::deaths
-                    )
+        collection
+            .aggregate<Top10Result>(
+                sort(
+                    descending(PlayerDataModel::deaths)
+                ),
+                limit(10),
+                project(
+                    Top10Result::uniqueId from PlayerDataModel::uniqueId,
+                    Top10Result::username from PlayerDataModel::username,
+                    Top10Result::value from PlayerDataModel::deaths
                 )
-                .toList()
-        }
+            )
+            .toList()
 }

@@ -2,8 +2,8 @@ package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
 
 import io.liftgate.mcplugins.toolkit.spigot.profiles.PlayerData
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
 import java.util.*
 
 /**
@@ -12,7 +12,7 @@ import java.util.*
  */
 @Serializable
 data class PlayerDataModel(
-    @BsonId
+    @SerialName("_id")
     override val uniqueId: @Contextual UUID,
     override var username: String,
     var deaths: Int = 0

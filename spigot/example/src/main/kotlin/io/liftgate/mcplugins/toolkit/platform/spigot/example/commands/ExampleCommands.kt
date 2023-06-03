@@ -5,7 +5,10 @@ import co.aikar.commands.annotation.CommandPermission
 import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.model.PlayerDataManager
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.bukkit.Bukkit
@@ -40,10 +43,14 @@ class ExampleCommands : ToolkitCommand()
         runBlocking {
             sender.sendMessage("=== Top 10 deaths ===")
 
-            manager.aggregateTop10KillsEntries()
-                .forEachIndexed { index, result ->
-                    sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
-                }
+            withContext(Dispatchers.IO) {
+                manager.aggregateTop10KillsEntries()
+                    .forEachIndexed { index, result ->
+                        sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
+                    }
+
+                sender.sendMessage("[async] on ${Thread.currentThread().name}")
+            }
 
             sender.sendMessage("[runBlocking] on ${Thread.currentThread().name}")
         }

@@ -1,9 +1,9 @@
 package io.liftgate.mcplugins.toolkit.profile
 
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.bson.codecs.pojo.annotations.BsonId
-import java.util.UUID
+import java.util.*
 
 /**
  * Since player IDs are returned in Mojang's format when
@@ -18,7 +18,7 @@ import java.util.UUID
  */
 @Serializable
 data class StoredPlayerProfile(
-    @BsonId
+    @SerialName("_id")
     val uniqueId: @Contextual UUID,
     var username: String
 )
