@@ -2,6 +2,7 @@ package io.liftgate.mcplugins.toolkit.datastore.mongo
 
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
+import com.mongodb.MongoCredential
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
@@ -36,7 +37,7 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
     lateinit var logger: Logger
 
     @Inject
-    lateinit var config: MongoConfig
+    lateinit var config: MongoConfig.Model
 
     @Inject
     lateinit var plugin: ToolkitPlugin
@@ -46,15 +47,28 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
 
     override fun postConstruct()
     {
+        val clientSettings = MongoClientSettings
+            .builder()
+            .uuidRepresentation(UuidRepresentation.STANDARD)
+            .applyConnectionString(
+                ConnectionString(config.uri)
+            )
+
+        if (config.credentials.enabled)
+        {
+            clientSettings
+                .credential(
+                    MongoCredential.createCredential(
+                        config.credentials.username,
+                        config.credentials.database,
+                        config.credentials.password.toCharArray()
+                    )
+                )
+        }
+
         client = KMongo
             .createClient(
-                MongoClientSettings
-                    .builder()
-                    .uuidRepresentation(UuidRepresentation.STANDARD)
-                    .applyConnectionString(
-                        ConnectionString(config.uri)
-                    )
-                    .build()
+                clientSettings.build()
             )
             .coroutine
 

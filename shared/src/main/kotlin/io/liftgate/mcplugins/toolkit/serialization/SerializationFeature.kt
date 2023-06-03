@@ -21,7 +21,6 @@ class SerializationFeature : CorePluginFeature
 {
     override fun rank() = 10
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
         // set mapping service to serialization before using KMongo's serialization module

@@ -22,7 +22,6 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
     }
 
     override fun getLocator() = container.locator
-    override fun getClassLoaderPublic() = classLoader
 
     override fun onLoad()
     {

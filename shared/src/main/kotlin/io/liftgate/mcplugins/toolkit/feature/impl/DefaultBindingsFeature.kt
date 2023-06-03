@@ -3,6 +3,7 @@ package io.liftgate.mcplugins.toolkit.feature.impl
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
+import org.glassfish.hk2.api.ServiceLocator
 import org.jvnet.hk2.annotations.Service
 import java.util.logging.Logger
 
@@ -15,15 +16,27 @@ import java.util.logging.Logger
 @Service
 class DefaultBindingsFeature : CorePluginFeature
 {
+    override fun rank() = 30
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
         bind(plugin) {
-            val binder = bind(plugin)
-            BindingBuilderUtilities
-                .bindTo(
-                    binder,
-                    ToolkitPluginContainer::class.java
-                )
+            bind(plugin)
+                .apply {
+                    BindingBuilderUtilities
+                        .bindTo(
+                            this,
+                            ToolkitPluginContainer::class.java
+                        )
+                }
+
+            bind(plugin.locator)
+                .apply {
+                    BindingBuilderUtilities
+                        .bindTo(
+                            this,
+                            ServiceLocator::class.java
+                        )
+                }
 
             bind(plugin.plugin.getLogger())
                 .apply {

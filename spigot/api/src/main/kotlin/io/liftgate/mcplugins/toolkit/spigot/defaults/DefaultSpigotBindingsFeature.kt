@@ -20,6 +20,7 @@ import org.jvnet.hk2.annotations.Service
 @Service
 class DefaultSpigotBindingsFeature : CorePluginFeature
 {
+    override fun rank() = 30
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
         bind(plugin) {
