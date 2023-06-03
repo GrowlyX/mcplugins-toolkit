@@ -5,6 +5,7 @@ import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.bindTo
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
+import io.liftgate.mcplugins.toolkit.pluginBinder
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import org.bukkit.Bukkit
 import org.bukkit.Server

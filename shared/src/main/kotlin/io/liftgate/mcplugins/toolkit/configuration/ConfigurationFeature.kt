@@ -7,6 +7,7 @@ import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
+import io.liftgate.mcplugins.toolkit.pluginBinder
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.serialization.kmongoSerializationModule
 

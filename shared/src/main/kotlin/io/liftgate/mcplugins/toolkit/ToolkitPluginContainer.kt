@@ -2,6 +2,7 @@ package io.liftgate.mcplugins.toolkit
 
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.descriptor.DescriptorProcessor
+import io.liftgate.mcplugins.toolkit.descriptor.SoftDependQualifierProcessor
 import io.liftgate.mcplugins.toolkit.export.Export
 import io.liftgate.mcplugins.toolkit.export.ExportedServices
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
@@ -40,14 +41,24 @@ class ToolkitPluginContainer(
                 it.preDisable(this)
             }
 
-        locator.shutdown()
         runBlocking {
             plugin.disable()
         }
+
+        ServiceLocatorFactory
+            .getInstance()
+            .destroy(locator)
     }
 
     fun onLoad(): Boolean
     {
+        pluginBinder(this) {
+            bind(SoftDependQualifierProcessor::class.java)
+                .bindTo(
+                    DescriptorProcessor::class
+                )
+        }
+
         // load descriptors onLoad prior to any
         // plugin enable lifecycle events
         return loadDescriptors()

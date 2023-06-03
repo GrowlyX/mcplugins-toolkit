@@ -3,6 +3,7 @@ package io.liftgate.mcplugins.toolkit.feature.impl
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.bindTo
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
+import io.liftgate.mcplugins.toolkit.pluginBinder
 import org.glassfish.hk2.api.ServiceLocator
 import org.jvnet.hk2.annotations.Service
 import java.util.logging.Logger

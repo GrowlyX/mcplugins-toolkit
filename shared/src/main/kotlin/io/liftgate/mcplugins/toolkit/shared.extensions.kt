@@ -3,6 +3,7 @@ package io.liftgate.mcplugins.toolkit
 import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
 import kotlinx.coroutines.runBlocking
 import org.glassfish.hk2.utilities.binding.ScopedBindingBuilder
+import org.glassfish.hk2.utilities.binding.ServiceBindingBuilder
 import kotlin.reflect.KClass
 
 /**
@@ -33,6 +34,18 @@ fun runBlockingUnsafe(
     }
 
 fun <T : Any> ScopedBindingBuilder<T>.bindTo(
+    vararg kClasses: KClass<in T>
+) = apply {
+    BindingBuilderUtilities
+        .bindTo(
+            this,
+            *kClasses
+                .map { it.java }
+                .toTypedArray()
+        )
+}
+
+fun <T : Any> ServiceBindingBuilder<T>.bindTo(
     vararg kClasses: KClass<in T>
 ) = apply {
     BindingBuilderUtilities

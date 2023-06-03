@@ -4,6 +4,7 @@ import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.bindTo
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
+import io.liftgate.mcplugins.toolkit.pluginBinder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.jvnet.hk2.annotations.Service

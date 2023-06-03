@@ -5,7 +5,7 @@ import org.glassfish.hk2.utilities.DescriptorImpl
 import kotlin.reflect.KClass
 
 /**
- * A wrapper around [DescriptorProcessor] which skips the 
+ * A wrapper around [DescriptorProcessor] which skips the
  * processing of descriptors that do not have the necassary qualifier.
  *
  * @author GrowlyX
@@ -15,12 +15,12 @@ abstract class QualifierProcessor(
     private val annotation: KClass<*>
 ) : DescriptorProcessor
 {
-    abstract fun process(descriptor: DescriptorImpl): DescriptorImpl
+    abstract fun process(descriptor: DescriptorImpl): DescriptorImpl?
 
     override fun process(
         serviceLocator: ServiceLocator,
         descriptorImpl: DescriptorImpl
-    ): DescriptorImpl
+    ): DescriptorImpl?
     {
         if (descriptorImpl.qualifiers.contains(annotation.java.name))
         {

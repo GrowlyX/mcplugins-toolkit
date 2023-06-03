@@ -32,22 +32,4 @@ interface CorePluginFeature
     {
 
     }
-
-    fun pluginBinder(
-        plugin: ToolkitPluginContainer,
-        binder: AbstractBinder.() -> Unit
-    )
-    {
-        ServiceLocatorUtilities
-            .bind(
-                plugin.locator,
-                object : AbstractBinder()
-                {
-                    override fun configure()
-                    {
-                        binder(this)
-                    }
-                }
-            )
-    }
 }
