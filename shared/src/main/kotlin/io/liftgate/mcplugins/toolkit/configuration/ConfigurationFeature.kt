@@ -1,11 +1,10 @@
 package io.liftgate.mcplugins.toolkit.configuration
 
 import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.decodeFromStream
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
-import io.liftgate.mcplugins.toolkit.kompat.getService
+import org.glassfish.hk2.api.Rank
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.serialization.kmongoSerializationModule
 import java.io.File
@@ -15,6 +14,7 @@ import java.io.File
  * @since 6/1/2023
  */
 @Service
+@Rank(-10)
 class ConfigurationFeature : CorePluginFeature
 {
     override fun preEnable(plugin: ToolkitPluginContainer)

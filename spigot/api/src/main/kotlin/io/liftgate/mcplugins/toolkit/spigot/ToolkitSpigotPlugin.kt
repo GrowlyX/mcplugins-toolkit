@@ -1,6 +1,8 @@
 package io.liftgate.mcplugins.toolkit.spigot
 
+import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
+import com.github.shynixn.mccoroutine.bukkit.mcCoroutineConfiguration
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import org.bukkit.Bukkit
@@ -23,10 +25,13 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
 
     override fun onLoad()
     {
+        mcCoroutineConfiguration.shutdownStrategy = ShutdownStrategy.MANUAL
+
         // Create plugin-specific ServiceLocator
         // prior to any enable events being called
         if (!container.onLoad())
         {
+            logger.info("Failed to load descriptors, disabling")
             Bukkit.getPluginManager()
                 .disablePlugin(this)
         }
@@ -54,6 +59,7 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
         if (pluginEnabled)
         {
             container.onDisable()
+            mcCoroutineConfiguration.disposePluginSession()
         }
     }
 
