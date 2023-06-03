@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.profile
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -12,5 +13,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MojangPlayerProfile(
     val id: String,
+    @SerialName("name")
     var username: String
 )

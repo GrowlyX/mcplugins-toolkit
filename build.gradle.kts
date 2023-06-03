@@ -6,7 +6,7 @@ import org.jetbrains.gradle.ext.Gradle
 
 plugins {
     `maven-publish`
-    `java`
+    java
     kotlin("jvm") version libs.versions.kotlin
     kotlin("kapt") version libs.versions.kotlin
     kotlin("plugin.serialization") version libs.versions.kotlin

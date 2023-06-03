@@ -12,9 +12,11 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
+import org.litote.kmongo.and
 import org.litote.kmongo.ascending
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.eq
+import org.litote.kmongo.ne
 import java.util.*
 import java.util.logging.Logger
 import kotlin.time.Duration.Companion.minutes
@@ -86,10 +88,13 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         }
     }
 
-    suspend fun findDuplicates(username: String) =
+    suspend fun findDuplicates(username: String, id: UUID) =
         collection
             .find(
-                StoredPlayerProfile::username eq username
+                and(
+                    StoredPlayerProfile::username eq username,
+                    StoredPlayerProfile::uniqueId ne id
+                )
             )
             .toList()
 

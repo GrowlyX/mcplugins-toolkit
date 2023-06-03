@@ -34,7 +34,9 @@ class StoredPlayerProfileListener : CoroutineListener
                 )
 
             profileManager
-                .findDuplicates(profile.username)
+                .findDuplicates(
+                    profile.username, profile.uniqueId
+                )
                 .forEach {
                     val mojangProfile = profileManager
                         .loadAPIProfileFromUniqueId(
