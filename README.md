@@ -3,6 +3,11 @@ Kotlin Minecraft plugin development toolkit.
 
 ## Features:
  - Service management & DI ([HK2](https://javaee.github.io/hk2/introduction.html)) 
+   - Auto-scanning of @Service classes at compile-time
+   - Automatic listener registration (implementing CoroutineListener)
+   - Automatic command registration (implementing ToolkitCommand)
+   - Plugin lifecycles and "features" (using CorePluginFeature)
+     - References taken from [PluginInject](https://github.com/natemort/PluginInject)
  - Data store (via MongoDB)
    - Player profile caching
  - Coroutine plugin framework (via [MCCoroutine](https://github.com/Shynixn/MCCoroutine))
