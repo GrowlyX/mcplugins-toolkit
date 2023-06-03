@@ -18,6 +18,10 @@ Kotlin Minecraft plugin development toolkit.
    - Run `./gradlew clean build`
  - Copy the pre-built artifacts from `(module)/build/libs/toolkit-(module).jar`
 
+## Platforms:
+- Spigot
+  - _Tested on:_ **1.19**
+
 ### Examples:
 [Spigot](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/spigot/example)
 
