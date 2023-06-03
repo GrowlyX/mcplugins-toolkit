@@ -21,9 +21,7 @@ Kotlin Minecraft plugin development toolkit.
 ## Platforms:
 - Spigot
   - _Tested on:_ **1.19**
-
-### Examples:
-[Spigot](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/spigot/example)
+  - [Usage Example](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/spigot/example)
 
 ### TODO:
  - Yaml configuration (via kaml)
