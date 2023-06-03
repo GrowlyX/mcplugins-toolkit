@@ -14,7 +14,6 @@ import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.ascending
 import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.descending
 import org.litote.kmongo.eq
 import java.util.*
 import java.util.logging.Logger
@@ -85,6 +84,19 @@ class StoredPlayerProfileManager : Eager, PostConstruct
                 "Created StoredPlayerProfileManager collection indexes"
             )
         }
+    }
+
+    suspend fun findDuplicates(username: String) =
+        collection
+            .find(
+                StoredPlayerProfile::username eq username
+            )
+            .toList()
+
+    suspend fun cacheStoredProfile(storedProfile: StoredPlayerProfile)
+    {
+        populateLocalCaches(storedProfile)
+        collection.save(storedProfile)
     }
 
     suspend fun loadProfileFromUniqueId(uniqueId: UUID) =
