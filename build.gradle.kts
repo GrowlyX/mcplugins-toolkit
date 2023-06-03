@@ -3,6 +3,7 @@ import org.jetbrains.gradle.ext.runConfigurations
 import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.gradle.ext.Gradle
+import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
 plugins {
     `maven-publish`
@@ -56,7 +57,6 @@ subprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions.javaParameters = true
         kotlinOptions.jvmTarget = "17"
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 
     publishing {

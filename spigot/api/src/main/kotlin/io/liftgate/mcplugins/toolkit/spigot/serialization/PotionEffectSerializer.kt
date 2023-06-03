@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.glassfish.hk2.api.Rank
 import org.jvnet.hk2.annotations.Service
 
 /**
@@ -15,6 +16,7 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/1/2023
  */
 @Service
+@Rank(10)
 class PotionEffectSerializer : Serializer<PotionEffect>()
 {
     override val descriptor: SerialDescriptor =
