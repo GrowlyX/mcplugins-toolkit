@@ -57,12 +57,6 @@ class ExampleCommands : ToolkitCommand()
             json.encodeToString(stack)
         )
 
-        val world = Bukkit.getWorlds().first()
-        sender.sendMessage("===")
-        sender.sendMessage(
-            json.encodeToString(world)
-        )
-
         val color = Color.AQUA
         sender.sendMessage("===")
         sender.sendMessage(
