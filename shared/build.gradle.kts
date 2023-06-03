@@ -1,7 +1,10 @@
 dependencies {
     compileOnly(libs.commands.core)
+    api(libs.cache4k)
+
     api(libs.datastore.lettuce)
     api(libs.datastore.kmongo)
+
     api(libs.ktx.coroutines.core)
     api(libs.ktx.coroutines.jdk8)
     api(libs.ktx.serialization.json)

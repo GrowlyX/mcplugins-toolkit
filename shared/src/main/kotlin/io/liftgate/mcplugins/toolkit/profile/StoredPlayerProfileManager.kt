@@ -1,20 +1,22 @@
 package io.liftgate.mcplugins.toolkit.profile
 
 import com.mongodb.client.model.IndexOptions
+import io.github.reactivecircus.cache4k.Cache
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
-import io.liftgate.mcplugins.toolkit.export.Export
 import io.liftgate.mcplugins.toolkit.datastore.restful.RESTDatastore
+import io.liftgate.mcplugins.toolkit.export.Export
 import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.eq
-import java.util.UUID
+import java.util.*
 import java.util.logging.Logger
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * Caching mechanism for Mojang player account
@@ -32,6 +34,9 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         @JvmStatic
         val MOJANG_ID_REGEX = "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})".toRegex()
 
+        @JvmStatic
+        val LOCAL_EXPIRATION_DURATION = 10L.minutes
+
         const val MOJANG_USERNAME_ENDPOINT = "https://api.mojang.com/users/profiles/minecraft/%s"
         const val MOJANG_UNIQUEID_ENDPOINT = "https://sessionserver.mojang.com/session/minecraft/profile/%s"
     }
@@ -46,7 +51,14 @@ class StoredPlayerProfileManager : Eager, PostConstruct
     lateinit var logger: Logger
 
     private lateinit var collection: CoroutineCollection<StoredPlayerProfile>
-    // TODO: local 10m caching
+
+    private val idToProfileMappings = Cache.Builder<UUID, StoredPlayerProfile>()
+        .expireAfterWrite(LOCAL_EXPIRATION_DURATION)
+        .build()
+
+    private val nameToProfileMappings = Cache.Builder<String, StoredPlayerProfile>()
+        .expireAfterWrite(LOCAL_EXPIRATION_DURATION)
+        .build()
 
     override fun postConstruct()
     {
@@ -70,10 +82,14 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         loadProfileFromUniqueIdNullable(uniqueId)!!
 
     suspend fun loadProfileFromUniqueIdNullable(uniqueId: UUID) =
-        collection
-            .findOne(
-                StoredPlayerProfile::uniqueId eq uniqueId
-            )
+        idToProfileMappings.get(uniqueId)
+            ?: collection
+                .findOne(
+                    StoredPlayerProfile::uniqueId eq uniqueId
+                )
+                ?.apply {
+                    populateLocalCaches(this)
+                }
             ?: parseAndCacheAPILoadedProfile(
                 loadAPIProfileFromUniqueId(uniqueId)
             )
@@ -82,14 +98,24 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         loadProfileFromUsernameNullable(username)!!
 
     suspend fun loadProfileFromUsernameNullable(username: String) =
-        collection
-            .findOne(
-                // TODO: case insensitive or not?
-                StoredPlayerProfile::username eq username
-            )
+        nameToProfileMappings.get(username.lowercase())
+            ?: collection
+                .findOne(
+                    // TODO: case insensitive or not?
+                    StoredPlayerProfile::username eq username
+                )
+                ?.apply {
+                    populateLocalCaches(this)
+                }
             ?: parseAndCacheAPILoadedProfile(
                 loadAPIProfileFromUsername(username)
             )
+
+    private fun populateLocalCaches(profile: StoredPlayerProfile)
+    {
+        idToProfileMappings.put(profile.uniqueId, profile)
+        nameToProfileMappings.put(profile.username.lowercase(), profile)
+    }
 
     private suspend fun parseAndCacheAPILoadedProfile(
         apiLoaded: MojangPlayerProfile?
@@ -109,7 +135,9 @@ class StoredPlayerProfileManager : Eager, PostConstruct
             username = apiLoaded.username
         )
 
+        populateLocalCaches(storedProfile)
         collection.save(storedProfile)
+
         return storedProfile
     }
 

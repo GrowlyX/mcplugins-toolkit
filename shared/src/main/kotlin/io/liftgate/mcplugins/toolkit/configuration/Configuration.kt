@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.configuration
 
+import kotlinx.serialization.KSerializer
 import org.jvnet.hk2.annotations.Contract
 
 /**
@@ -13,4 +14,5 @@ import org.jvnet.hk2.annotations.Contract
 interface Configuration
 {
     fun getFileName(): String
+    fun serializer(): KSerializer<*>
 }

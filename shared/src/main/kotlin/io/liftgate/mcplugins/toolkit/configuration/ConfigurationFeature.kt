@@ -36,11 +36,14 @@ class ConfigurationFeature : CorePluginFeature
                 config.getFileName()
             )
 
-            plugin.locator
-                .getService<Yaml>()
-                .decodeFromStream(
-                    configFile.inputStream()
-                )
+            // TODO: fix inputFromStream reified type
+            /**
+             * plugin.locator
+             *                     .getService<Yaml>()
+             *                     .decodeFromStream(
+             *                         configFile.inputStream()
+             *                     )
+             */
         }
     }
 }

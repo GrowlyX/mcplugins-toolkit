@@ -13,6 +13,7 @@ javax-inject = "1.1"
 commands = "0.5.1-SNAPSHOT"
 ktor = "2.3.1"
 kotlin = "1.8.20"
+cache4k = "0.11.0"
 
 plugins-shadow = "7.1.2"
 plugins-idea-ext = "1.1.6"
@@ -104,3 +105,7 @@ version.ref = "ktor"
 [libraries.ktor-client-serialization-core]
 module = "io.ktor:ktor-client-content-negotiation"
 version.ref = "ktor"
+
+[libraries.cache4k]
+module = "io.github.reactivecircus.cache4k:cache4k"
+version.ref = "cache4k"
