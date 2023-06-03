@@ -16,6 +16,7 @@ import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+import org.litote.kmongo.serialization.SerializationClassMappingTypeService
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -44,6 +45,11 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
 
     override fun postConstruct()
     {
+        System.setProperty(
+            "org.litote.mongo.mapping.service",
+            SerializationClassMappingTypeService::class.qualifiedName!!
+        )
+
         client = KMongo
             .createClient(
                 MongoClientSettings
