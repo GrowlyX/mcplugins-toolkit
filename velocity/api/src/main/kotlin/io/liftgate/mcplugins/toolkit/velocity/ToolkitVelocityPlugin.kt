@@ -6,7 +6,6 @@ import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
-import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
@@ -36,14 +35,14 @@ abstract class ToolkitVelocityPlugin(
 ) : ToolkitPlugin
 {
     @Inject lateinit var pluginContainer: PluginContainer
-    @Inject lateinit var logger: Logger
+    @Inject lateinit var _logger: Logger
     @Inject lateinit var server: ProxyServer
 
     private val toolkitContainer by lazy {
         ToolkitPluginContainer(this)
     }
 
-    private val dataFolder = directory.toFile()
+    private val _dataFolder = directory.toFile()
     private var pluginEnabled = false
 
     init
@@ -77,8 +76,8 @@ abstract class ToolkitVelocityPlugin(
     }
 
     override fun getName() = pluginContainer.description.name.get()
-    override fun getLogger() = logger
-    override fun getDataFolder(): File = dataFolder
+    override fun getLogger() = _logger
+    override fun getDataFolder(): File = _dataFolder
 
     override fun getLocator() = toolkitContainer.locator
 }

@@ -82,7 +82,7 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
             if (usernameNoLongerMatches)
             {
                 save(playerProfile)
-                plugin.logger.info(
+                plugin._logger.info(
                     "Pushing username update for ${playerProfile.uniqueId}"
                 )
             }
