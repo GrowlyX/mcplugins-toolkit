@@ -3,7 +3,8 @@ package io.liftgate.mcplugins.toolkit.export
 import jakarta.inject.Qualifier
 
 /**
- * Exposes local services to the entire platform.
+ * Exposes the current local service to
+ * all other ServiceLocators.
  *
  * @author GrowlyX
  * @since 5/31/2023

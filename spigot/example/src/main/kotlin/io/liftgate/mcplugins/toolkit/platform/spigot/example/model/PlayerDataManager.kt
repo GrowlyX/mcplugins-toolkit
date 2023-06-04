@@ -1,7 +1,6 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
 
 import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
-import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
 import io.liftgate.mcplugins.toolkit.spigot.profiles.PlayerDataProvider
 import jakarta.inject.Inject
 import kotlinx.serialization.Contextual

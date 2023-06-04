@@ -42,7 +42,7 @@ interface ToolkitPlugin
      * main classes are disposed at this point, so please use Dispatchers.IO if
      * running asynchronous tasks on shutdown.
      */
-    open suspend fun disable()
+    suspend fun disable()
     {
 
     }

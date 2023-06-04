@@ -31,6 +31,16 @@ public enum BindingBuilderUtilities {
     @SafeVarargs
     public static <T> void bindTo(
             @NotNull ServiceBindingBuilder<T> builder,
+            @NotNull Class<? extends T>... clazz
+    ) {
+        for (final var aClass : clazz) {
+            builder.to(aClass);
+        }
+    }
+
+    @SafeVarargs
+    public static <T> void bindToSuperService(
+            @NotNull ServiceBindingBuilder<T> builder,
             @NotNull Class<? super T>... clazz
     ) {
         for (final var aClass : clazz) {

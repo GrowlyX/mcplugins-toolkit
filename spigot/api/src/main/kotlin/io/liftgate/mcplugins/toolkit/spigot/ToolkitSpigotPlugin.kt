@@ -3,11 +3,8 @@ package io.liftgate.mcplugins.toolkit.spigot
 import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import com.github.shynixn.mccoroutine.bukkit.mcCoroutineConfiguration
-import io.liftgate.mcplugins.toolkit.ToolkitPlugin
-import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
-import io.liftgate.mcplugins.toolkit.bindTo
+import io.liftgate.mcplugins.toolkit.*
 import io.liftgate.mcplugins.toolkit.descriptor.DescriptorProcessor
-import io.liftgate.mcplugins.toolkit.pluginBinder
 import io.liftgate.mcplugins.toolkit.spigot.version.ServerVersionQualifierProcessor
 import org.bukkit.Bukkit
 
@@ -31,7 +28,7 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
     {
         pluginBinder(container) {
             bind(ServerVersionQualifierProcessor::class.java)
-                .bindTo(
+                .bindToSuper(
                     DescriptorProcessor::class
                 )
         }

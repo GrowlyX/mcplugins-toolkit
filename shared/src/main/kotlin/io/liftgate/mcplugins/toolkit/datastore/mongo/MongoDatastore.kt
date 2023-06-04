@@ -12,13 +12,11 @@ import jakarta.inject.Inject
 import org.bson.UuidRepresentation
 import org.glassfish.hk2.api.PostConstruct
 import org.glassfish.hk2.api.PreDestroy
-import org.glassfish.hk2.api.Rank
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
-import org.litote.kmongo.serialization.SerializationClassMappingTypeService
 import java.util.logging.Level
 import java.util.logging.Logger
 

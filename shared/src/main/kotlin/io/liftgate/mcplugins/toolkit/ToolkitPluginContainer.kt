@@ -10,11 +10,14 @@ import io.liftgate.mcplugins.toolkit.feature.CorePluginFeatures
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import io.liftgate.mcplugins.toolkit.kompat.getService
 import kotlinx.coroutines.runBlocking
+import org.glassfish.hk2.api.ActiveDescriptor
 import org.glassfish.hk2.api.DynamicConfigurationService
+import org.glassfish.hk2.api.Factory
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.hk2.api.ServiceLocatorFactory
 import org.glassfish.hk2.utilities.ClasspathDescriptorFileFinder
 import org.jvnet.hk2.annotations.Contract
+import org.jvnet.hk2.internal.SystemDescriptor
 import java.io.IOException
 import java.util.logging.Level
 
@@ -54,7 +57,7 @@ class ToolkitPluginContainer(
     {
         pluginBinder(this) {
             bind(SoftDependQualifierProcessor::class.java)
-                .bindTo(
+                .bindToSuper(
                     DescriptorProcessor::class
                 )
         }
@@ -78,24 +81,26 @@ class ToolkitPluginContainer(
                 it.preEnable(this)
             }
 
-        // add exported services into our plugin-specific
-        // ServiceLocator via dcs
-        val dcs = locator
-            .getService<DynamicConfigurationService>()
-        dcs.createDynamicConfiguration()
-            .apply {
-                ExportedServices
-                    .forEach { descriptor ->
-                        addActiveDescriptor(descriptor)
-                    }
-
-                commit()
-            }
+        // bind existing exported services to this ServiceLocator
+        pluginBinder(this) {
+            ExportedServices
+                .forEach { export ->
+                    bindFactory(object : Factory<Any>
+                    {
+                        override fun provide() = export
+                        override fun dispose(instance: Any?) = Unit
+                    }).bindTo(export::class)
+                }
+        }
 
         // add our own exported services AFTER
         // existing exports are applied.
-        ExportedServices +=
-            getDescriptors<Export>()
+        locator
+            .getAllServices {
+                it.qualifiers.contains(Export::class.java.name)
+            }
+            .filterNotNull()
+            .forEach(ExportedServices::add)
 
         // instantiate eager services on startup & inject the base plugin container
         locator.getAllServices(Eager::class.java)

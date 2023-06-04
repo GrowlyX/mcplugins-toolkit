@@ -45,8 +45,20 @@ fun <T : Any> ScopedBindingBuilder<T>.bindTo(
         )
 }
 
-fun <T : Any> ServiceBindingBuilder<T>.bindTo(
+fun <T : Any> ServiceBindingBuilder<T>.bindToSuper(
     vararg kClasses: KClass<in T>
+) = apply {
+    BindingBuilderUtilities
+        .bindToSuperService(
+            this,
+            *kClasses
+                .map { it.java }
+                .toTypedArray()
+        )
+}
+
+fun <T : Any> ServiceBindingBuilder<T>.bindTo(
+    vararg kClasses: KClass<out T>
 ) = apply {
     BindingBuilderUtilities
         .bindTo(
