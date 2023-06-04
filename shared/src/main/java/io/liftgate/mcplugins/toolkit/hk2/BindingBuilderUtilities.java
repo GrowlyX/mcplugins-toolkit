@@ -38,6 +38,10 @@ public enum BindingBuilderUtilities {
         }
     }
 
+    /**
+     * The only difference between this and bindTo(ServiceBindingBuilder<T>...) is
+     * the type argument for Class is super rather than extends.
+     */
     @SafeVarargs
     public static <T> void bindToSuperService(
             @NotNull ServiceBindingBuilder<T> builder,

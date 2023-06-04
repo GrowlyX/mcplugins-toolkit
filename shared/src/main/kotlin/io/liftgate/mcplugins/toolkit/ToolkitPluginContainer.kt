@@ -10,14 +10,12 @@ import io.liftgate.mcplugins.toolkit.feature.CorePluginFeatures
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import io.liftgate.mcplugins.toolkit.kompat.getService
 import kotlinx.coroutines.runBlocking
-import org.glassfish.hk2.api.ActiveDescriptor
 import org.glassfish.hk2.api.DynamicConfigurationService
 import org.glassfish.hk2.api.Factory
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.hk2.api.ServiceLocatorFactory
 import org.glassfish.hk2.utilities.ClasspathDescriptorFileFinder
 import org.jvnet.hk2.annotations.Contract
-import org.jvnet.hk2.internal.SystemDescriptor
 import java.io.IOException
 import java.util.logging.Level
 
