@@ -88,6 +88,9 @@ class ToolkitPluginContainer(
                     bindFactory(object : Factory<Any>
                     {
                         override fun provide() = export
+
+                        // provider plugin is responsible for disposing
+                        // this resource, so we do nothing here
                         override fun dispose(instance: Any?) = Unit
                     }).bindTo(export::class)
                 }
