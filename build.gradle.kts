@@ -26,6 +26,9 @@ allprojects {
         maven {
             url = uri("https://repo.aikar.co/content/groups/aikar/")
         }
+        maven {
+            url = uri("https://repo.papermc.io/repository/maven-public/")
+        }
     }
 }
 

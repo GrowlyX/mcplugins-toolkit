@@ -30,3 +30,6 @@ Kotlin Minecraft plugin development toolkit.
 - Spigot
   - _Tested on:_ **1.19**
   - [Usage Example](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/spigot/example)
+- Velocity
+  - _Tested on:_ **3.2.0-SNAPSHOT** ⚠️
+  - [Usage Example](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/velocity/example)

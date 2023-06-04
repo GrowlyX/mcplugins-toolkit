@@ -1,4 +1,4 @@
-package io.liftgate.mcplugins.toolkit.spigot.profiles
+package io.liftgate.mcplugins.toolkit.playerdata
 
 import java.util.*
 

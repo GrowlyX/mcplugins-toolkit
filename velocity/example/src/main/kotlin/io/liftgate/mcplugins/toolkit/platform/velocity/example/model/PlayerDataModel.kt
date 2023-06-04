@@ -1,4 +1,4 @@
-package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
+package io.liftgate.mcplugins.toolkit.platform.velocity.example.model
 
 import io.liftgate.mcplugins.toolkit.playerdata.PlayerData
 import kotlinx.serialization.Contextual

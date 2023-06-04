@@ -1,12 +1,10 @@
-package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
+package io.liftgate.mcplugins.toolkit.platform.velocity.example.model
 
 import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
-import io.liftgate.mcplugins.toolkit.spigot.playerdata.PlayerDataProvider
+import io.liftgate.mcplugins.toolkit.velocity.playerdata.PlayerDataProvider
 import jakarta.inject.Inject
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import org.bukkit.event.EventHandler
-import org.bukkit.event.entity.PlayerDeathEvent
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -33,16 +31,6 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
         collection = mongo.client()
             .getCollection<PlayerDataModel>()
         super.postConstruct()
-    }
-
-    @EventHandler
-    suspend fun onPlayerDeath(event: PlayerDeathEvent)
-    {
-        findNullable(event.entity)
-            ?.apply {
-                this.deaths += 1
-                save(this)
-            }
     }
 
     @Serializable

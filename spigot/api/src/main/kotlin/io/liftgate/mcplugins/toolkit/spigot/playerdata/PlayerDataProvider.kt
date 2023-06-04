@@ -1,9 +1,9 @@
-package io.liftgate.mcplugins.toolkit.spigot.profiles
+package io.liftgate.mcplugins.toolkit.spigot.playerdata
 
-import com.github.shynixn.mccoroutine.bukkit.asyncDispatcher
 import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
 import com.mongodb.client.model.Filters
 import io.liftgate.mcplugins.toolkit.contracts.Eager
+import io.liftgate.mcplugins.toolkit.playerdata.PlayerData
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject

@@ -19,9 +19,6 @@ interface ToolkitPlugin
 
     fun getDataFolder(): File
 
-    fun getDependencies(): List<String>
-    fun getSoftDependencies(): List<String>
-
     fun getLocator(): ServiceLocator
 
     /**

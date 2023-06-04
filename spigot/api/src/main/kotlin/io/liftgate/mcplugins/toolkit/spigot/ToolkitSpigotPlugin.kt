@@ -71,7 +71,4 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
             mcCoroutineConfiguration.disposePluginSession()
         }
     }
-
-    override fun getDependencies() = description.depend.toList()
-    override fun getSoftDependencies() = description.softDepend.toList()
 }
