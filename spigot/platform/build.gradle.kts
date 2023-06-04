@@ -10,5 +10,5 @@ dependencies {
     api(project(":shared"))
 
     api(kotlin("stdlib"))
-    api(project(":spigot:api"))
+    api(project(":spigot:spigot-api"))
 }

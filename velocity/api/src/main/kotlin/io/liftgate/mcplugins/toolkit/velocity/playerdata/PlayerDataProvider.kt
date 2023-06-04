@@ -41,6 +41,8 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     @Inject
     lateinit var plugin: ToolkitVelocityPlugin
 
+    private var readOnlyCopies = false
+
     abstract fun collection(): CoroutineCollection<T>
     abstract fun createNew(uniqueId: UUID): T
 
@@ -49,6 +51,11 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
 
     fun findNullable(player: Player) = playerProfileCache[player.uniqueId]
     fun find(player: Player) = playerProfileCache[player.uniqueId]!!
+
+    fun setReadOnly()
+    {
+        readOnlyCopies = true
+    }
 
     override fun postConstruct()
     {
@@ -106,6 +113,11 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
 
     suspend fun save(profile: T)
     {
+        if (readOnlyCopies)
+        {
+            return
+        }
+
         withContext(Dispatchers.IO) {
             collection().save(profile)
         }

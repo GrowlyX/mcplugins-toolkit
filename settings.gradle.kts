@@ -2,5 +2,11 @@ rootProject.name = "mcplugins-toolkit"
 
 include("shared")
 listOf("spigot", "velocity").forEach {
-    include("$it:api", "$it:platform", "$it:example")
+    listOf("$it:api", "$it:platform", "$it:example")
+        .forEach { module ->
+            include(module)
+
+            val compat = module.replace(":", "-")
+            project(":$module").name = compat
+        }
 }

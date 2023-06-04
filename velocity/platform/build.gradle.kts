@@ -9,5 +9,5 @@ dependencies {
     api(project(":shared"))
 
     api(kotlin("stdlib"))
-    api(project(":velocity:api"))
+    api(project(":velocity:velocity-api"))
 }
