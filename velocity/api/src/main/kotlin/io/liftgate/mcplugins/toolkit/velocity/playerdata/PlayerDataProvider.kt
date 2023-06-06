@@ -23,11 +23,8 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * A lifecycle manager for user data
- * for online players.
- *
- * Data is cached as long as the player
- * is logged onto the server.
+ * Lifecycle management for online-player user data. Models
+ * are cached as long as the player is logged onto the server.
  *
  * @author GrowlyX
  * @since 5/31/2023
