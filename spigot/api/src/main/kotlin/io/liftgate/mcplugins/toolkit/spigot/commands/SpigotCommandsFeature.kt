@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
+import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import io.liftgate.mcplugins.toolkit.kompat.getServiceNullable
 import io.liftgate.mcplugins.toolkit.pluginBinder
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
@@ -30,13 +31,13 @@ class SpigotCommandsFeature : CorePluginFeature
         }
 
         plugin.locator
-            .getAllServices(SpigotCommandManagerCustomizer::class.java)
+            .getAllServices<SpigotCommandManagerCustomizer>()
             .forEach {
                 it.customize(manager)
             }
 
         plugin.locator
-            .getAllServices(ToolkitCommand::class.java)
+            .getAllServices<ToolkitCommand>()
             .forEach {
                 manager.registerCommand(it)
             }

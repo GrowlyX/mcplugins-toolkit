@@ -10,6 +10,7 @@ dependencies {
     api(libs.ktx.serialization.json)
     api(libs.ktx.serialization.yaml)
     api(libs.ktx.datetime)
+    api(libs.bearlocalizer)
 
     api(libs.ktor.client.core)
     api(libs.ktor.client.engine)
