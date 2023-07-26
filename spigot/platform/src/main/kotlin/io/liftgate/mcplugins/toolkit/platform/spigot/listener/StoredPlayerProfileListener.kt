@@ -34,17 +34,17 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
     @EventHandler
     suspend fun onPlayerJoin(event: PlayerJoinEvent)
     {
-        runAsync {
-            val profile = StoredPlayerProfile(
-                uniqueId = event.player.uniqueId,
-                username = event.player.name
+        val profile = StoredPlayerProfile(
+            uniqueId = event.player.uniqueId,
+            username = event.player.name
+        )
+
+        profileManager
+            .cacheStoredProfile(
+                storedProfile = profile
             )
-
-            profileManager
-                .cacheStoredProfile(
-                    storedProfile = profile
-                )
-
+            
+        runAsync {
             profileManager
                 .findDuplicates(
                     profile.username, profile.uniqueId
