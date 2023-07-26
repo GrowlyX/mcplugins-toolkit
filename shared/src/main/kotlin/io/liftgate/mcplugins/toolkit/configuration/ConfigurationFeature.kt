@@ -24,7 +24,7 @@ class ConfigurationFeature : CorePluginFeature
             bind(Yaml(
                 serializersModule = kmongoSerializationModule,
                 configuration = YamlConfiguration(
-                    yamlNamingStrategy = YamlNamingStrategy.KebabCase, // dash-split keys
+                    yamlNamingStrategy = YamlNamingStrategy.SnakeCase, // dash-split keys
                     strictMode = false // ignores any unknown, or non-existent keys
                 )
             )).apply {
