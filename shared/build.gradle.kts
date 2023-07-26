@@ -1,3 +1,7 @@
+repositories {
+    maven("https://jitpack.io/")
+}
+
 dependencies {
     compileOnly(libs.commands.core)
     api(libs.cache4k)
