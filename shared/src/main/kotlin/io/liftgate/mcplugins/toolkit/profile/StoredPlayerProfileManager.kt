@@ -1,5 +1,8 @@
 package io.liftgate.mcplugins.toolkit.profile
 
+import com.mongodb.client.model.Collation
+import com.mongodb.client.model.CollationCaseFirst
+import com.mongodb.client.model.IndexOptions
 import io.github.reactivecircus.cache4k.Cache
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -71,6 +74,11 @@ class StoredPlayerProfileManager : Eager, PostConstruct
             collection.createIndex(
                 ascending(
                     StoredPlayerProfile::username
+                ),
+                IndexOptions().collation(
+                    Collation.builder()
+                        .caseLevel(false)
+                        .build()
                 )
             )
 
@@ -119,7 +127,6 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         nameToProfileMappings.get(username.lowercase())
             ?: collection
                 .findOne(
-                    // TODO: case insensitive or not?
                     StoredPlayerProfile::username eq username
                 )
                 ?.apply {
