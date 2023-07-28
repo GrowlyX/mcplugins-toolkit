@@ -16,6 +16,8 @@ class ToolkitCommandManager(
     fun registerDefaults()
     {
         enableUnstableAPI("help")
+        enableUnstableAPI("brigadier")
+
         commandContexts
             .registerIssuerOnlyContext(
                 ConsoleCommandSender::class.java
