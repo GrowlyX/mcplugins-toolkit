@@ -5,6 +5,7 @@ import io.liftgate.localize.buckets.YamlResourceBucket
 import io.liftgate.localize.identity.Identity
 import io.liftgate.localize.identity.IdentityImpl
 import io.liftgate.localize.placeholder.PlaceholderProcessor
+import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.platform.spigot.ToolkitSpigotPlatformPlugin
 import jakarta.inject.Inject
 import org.bukkit.Bukkit
@@ -19,7 +20,7 @@ import java.util.*
  * @since 7/26/2023
  */
 @Service
-class LocalizerService : PostConstruct
+class LocalizerService : PostConstruct, Eager
 {
     @Inject
     lateinit var plugin: ToolkitSpigotPlatformPlugin
