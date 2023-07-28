@@ -76,6 +76,7 @@ class StoredPlayerProfileManager : Eager, PostConstruct
                 ),
                 IndexOptions().collation(
                     Collation.builder()
+                        .locale("en_US")
                         .caseLevel(false)
                         .build()
                 )
