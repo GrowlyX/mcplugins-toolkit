@@ -1,8 +1,7 @@
-package io.liftgate.mcplugins.toolkit.platform.spigot.localize
+package io.liftgate.mcplugins.toolkit.platform.spigot.localizer
 
 import io.liftgate.localize.Localizer
 import io.liftgate.localize.MappingRegistry
-import io.liftgate.localize.buckets.YamlResourceBucket
 import io.liftgate.localize.identity.Identity
 import io.liftgate.localize.identity.IdentityImpl
 import io.liftgate.localize.placeholder.PlaceholderProcessor
@@ -14,7 +13,6 @@ import org.bukkit.World
 import org.bukkit.entity.Player
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
-import java.io.File
 import java.util.*
 
 /**
