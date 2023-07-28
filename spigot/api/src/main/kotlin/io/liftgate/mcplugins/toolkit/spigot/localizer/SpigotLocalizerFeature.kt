@@ -19,17 +19,6 @@ class SpigotLocalizerFeature : CorePluginFeature
 {
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
-        MappingRegistry.apply {
-            registerDefaultComponent<Player>(Player::getName)
-            registerDefaultComponent<World>(World::getName)
-
-            registerComponent<Player>("name", Player::getName)
-            registerComponent<Player>("health") { it.health.toString() }
-            registerComponent<Player>("uuid") { it.uniqueId.toString() }
-            registerComponent<Player>("displayName") { it.displayName }
-            registerComponent<Player>("ping") { it.ping.toString() }
-        }
-
         plugin.locator
             .getAllServices<LocalizationTemplate>()
             .forEach {
