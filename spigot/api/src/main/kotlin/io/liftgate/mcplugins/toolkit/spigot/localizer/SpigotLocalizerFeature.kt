@@ -1,14 +1,13 @@
 package io.liftgate.mcplugins.toolkit.spigot.localizer
 
 import io.liftgate.localize.Localizer
-import io.liftgate.localize.MappingRegistry
+import io.liftgate.localize.buckets.YamlResourceBucket
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import io.liftgate.mcplugins.toolkit.localizer.LocalizationTemplate
-import org.bukkit.World
-import org.bukkit.entity.Player
 import org.jvnet.hk2.annotations.Service
+import java.io.File
 
 /**
  * @author GrowlyX
@@ -19,11 +18,29 @@ class SpigotLocalizerFeature : CorePluginFeature
 {
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
+        val languageDirectory = File(
+            plugin.plugin.getDataFolder(),
+            "language"
+        )
+
+        if (!languageDirectory.exists())
+        {
+            languageDirectory.mkdirs()
+        }
+
         plugin.locator
             .getAllServices<LocalizationTemplate>()
             .forEach {
-                // TODO: resource buckets are created with the toolkit's plugin files
-                Localizer.of(it.javaClass.kotlin)
+                plugin.plugin.getLogger().info("Loading localization resources for ${it.javaClass.name}")
+
+                Localizer.of(it.javaClass.kotlin) { kClass ->
+                    YamlResourceBucket(kClass, File(
+                        languageDirectory,
+                        "${kClass.java.simpleName
+                            .removeSuffix("Lang")
+                            .lowercase()}.yaml"
+                    ))
+                }
             }
     }
 }

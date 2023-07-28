@@ -71,12 +71,7 @@ class LocalizerService : PostConstruct, Eager
                     override fun transform(identity: Identity?, message: String) = message
                 }
             ) {
-                YamlResourceBucket(it, File(
-                    plugin.dataFolder,
-                    it.java.name
-                        .removeSuffix("Lang")
-                        .lowercase()
-                ))
+                TODO()
             }
     }
 }
