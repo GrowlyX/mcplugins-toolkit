@@ -4,14 +4,15 @@ import io.liftgate.localize.annotate.*
 import io.liftgate.localize.identity.Identity
 import io.liftgate.mcplugins.toolkit.localizer.LocalizationTemplate
 import org.jvnet.hk2.annotations.Service
+import kotlin.reflect.KClass
 
 /**
  * @author GrowlyX
  * @since 7/28/2023
  */
-@Service
-interface CoreLang : LocalizationTemplate
+interface CoreLang
 {
+    @Colored
     @Id("player_login")
     @Describe("Broadcasts this message to the server when a player logs in!")
     @DefaultsTo("&a%player% joined the game!")
@@ -29,4 +30,10 @@ interface CoreLang : LocalizationTemplate
         player: Identity,
         reason: String
     ): List<String>
+}
+
+@Service
+class CoreLangService : LocalizationTemplate
+{
+    override val langClass: KClass<*> = CoreLang::class
 }

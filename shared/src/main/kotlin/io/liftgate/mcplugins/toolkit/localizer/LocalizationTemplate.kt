@@ -1,6 +1,7 @@
 package io.liftgate.mcplugins.toolkit.localizer
 
 import org.jvnet.hk2.annotations.Contract
+import kotlin.reflect.KClass
 
 /**
  * Classifies an auto-registered localization
@@ -11,3 +12,6 @@ import org.jvnet.hk2.annotations.Contract
  */
 @Contract
 interface LocalizationTemplate
+{
+    val langClass: KClass<*>
+}

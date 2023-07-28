@@ -31,9 +31,11 @@ class SpigotLocalizerFeature : CorePluginFeature
         plugin.locator
             .getAllServices<LocalizationTemplate>()
             .forEach {
-                plugin.plugin.getLogger().info("Loading localization resources for ${it.javaClass.name}")
+                plugin.plugin.getLogger().info(
+                    "Loading localization resources for ${it.langClass.java.name}"
+                )
 
-                Localizer.of(it.javaClass.kotlin) { kClass ->
+                Localizer.of(it.langClass) { kClass ->
                     YamlResourceBucket(kClass, File(
                         languageDirectory,
                         "${kClass.java.simpleName
