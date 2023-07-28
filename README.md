@@ -20,6 +20,7 @@ Kotlin Minecraft plugin development toolkit.
 
 ## Getting started:
  - Clone this repository
+   - Ensure you have built the [BearLocalizer](https://github.com/GrowlyX/bearlocalizer) project to your local maven repository.
  - Opening the project in your JetBrains IDE:
    - Click run on the pre-defined `Build All Modules` gradle configuration.
  - Building through terminal:

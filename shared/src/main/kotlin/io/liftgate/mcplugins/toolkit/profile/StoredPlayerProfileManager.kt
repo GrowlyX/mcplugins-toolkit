@@ -1,7 +1,6 @@
 package io.liftgate.mcplugins.toolkit.profile
 
 import com.mongodb.client.model.Collation
-import com.mongodb.client.model.CollationCaseFirst
 import com.mongodb.client.model.IndexOptions
 import io.github.reactivecircus.cache4k.Cache
 import io.ktor.client.call.*

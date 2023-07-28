@@ -1,10 +1,10 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.localize
 
 import io.liftgate.localize.Localizer
+import io.liftgate.localize.buckets.YamlResourceBucket
 import io.liftgate.localize.identity.Identity
 import io.liftgate.localize.identity.IdentityImpl
 import io.liftgate.localize.placeholder.PlaceholderProcessor
-import io.liftgate.localize.properties.YamlResourceBucket
 import io.liftgate.mcplugins.toolkit.platform.spigot.ToolkitSpigotPlatformPlugin
 import jakarta.inject.Inject
 import org.bukkit.Bukkit

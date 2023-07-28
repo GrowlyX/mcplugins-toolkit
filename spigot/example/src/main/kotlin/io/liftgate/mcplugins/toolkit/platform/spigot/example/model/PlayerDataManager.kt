@@ -1,12 +1,17 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
 
+import io.liftgate.localize.Localizer
 import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
+import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLang
+import io.liftgate.mcplugins.toolkit.spigot.identity
 import io.liftgate.mcplugins.toolkit.spigot.playerdata.PlayerDataProvider
 import jakarta.inject.Inject
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
@@ -33,6 +38,22 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
         collection = mongo.client()
             .getCollection<PlayerDataModel>()
         super.postConstruct()
+    }
+
+    @EventHandler
+    fun PlayerJoinEvent.on()
+    {
+        joinMessage = Localizer.of<CoreLang>()
+            .playerJoins(player.identity)
+            .first()
+    }
+
+    @EventHandler
+    fun PlayerQuitEvent.on()
+    {
+        quitMessage = Localizer.of<CoreLang>()
+            .playerLeaves(player.identity, "quit")
+            .first()
     }
 
     @EventHandler

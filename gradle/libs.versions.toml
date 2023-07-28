@@ -15,7 +15,7 @@ ktor = "2.3.1"
 kotlin = "1.8.20"
 cache4k = "0.11.0"
 velocity = "3.1.1"
-bearlocalizer = "a403217816"
+bearlocalizer = "1.0-SNAPSHOT"
 
 plugins-shadow = "7.1.2"
 plugins-idea-ext = "1.1.6"
@@ -85,7 +85,7 @@ module = "org.glassfish.hk2:hk2-metadata-generator"
 version.ref = "hk2"
 
 [libraries.bearlocalizer]
-module = "com.github.GrowlyX:bearlocalizer"
+module = "io.liftgate.localize:bearlocalizer"
 version.ref = "bearlocalizer"
 
 [libraries.hk2-extras]

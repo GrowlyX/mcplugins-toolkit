@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.localizer
 
+import io.liftgate.localize.Localizer
 import org.jvnet.hk2.annotations.Contract
 
 /**
@@ -11,3 +12,9 @@ import org.jvnet.hk2.annotations.Contract
  */
 @Contract
 interface LocalizationTemplate
+{
+    fun thing()
+    {
+
+    }
+}
