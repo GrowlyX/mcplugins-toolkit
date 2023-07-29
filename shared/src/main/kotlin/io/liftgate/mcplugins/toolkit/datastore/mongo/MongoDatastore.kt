@@ -41,8 +41,8 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
     @Inject
     lateinit var plugin: ToolkitPlugin
 
-    private lateinit var client: CoroutineClient
-    private lateinit var database: CoroutineDatabase
+    private var client: CoroutineClient? = null
+    private var database: CoroutineDatabase? = null
 
     override fun postConstruct()
     {
@@ -73,24 +73,26 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
             .coroutine
 
         database = client
-            .getDatabase(config.database)
-
-        logger.info("Loaded mongo services with database ${config.database}")
+            ?.getDatabase(config.database)
+            ?.apply {
+                logger.info("Loaded mongo services with database ${config.database}")
+            }
+            ?: run {
+                logger.warning("MongoDatastore was not initialized properly! This may causes below!")
+                null
+            }
     }
 
     override fun preDestroy()
     {
-        runBlockingUnsafe({
-            logger.log(
-                Level.SEVERE,
-                "Failed to close Mongo datastore",
-                it
-            )
-        }) {
-            client.close()
-            logger.info("Disposed of mongo services")
-        }
+        client
+            ?.close()
+            ?.apply {
+                logger.info("Disposed of mongo services")
+            }
     }
 
-    override fun client() = this.database
+    override fun client() = checkNotNull(database) {
+        "MongoDatastore was not initialized properly! Check startup logs for any errors."
+    }
 }

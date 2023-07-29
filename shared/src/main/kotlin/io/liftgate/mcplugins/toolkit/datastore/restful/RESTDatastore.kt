@@ -26,7 +26,7 @@ class RESTDatastore : Eager, PostConstruct, PreDestroy, Datastore<HttpClient>
     @Inject
     lateinit var logger: Logger
 
-    private lateinit var client: HttpClient
+    private var client: HttpClient? = null
 
     override fun postConstruct()
     {
@@ -51,9 +51,14 @@ class RESTDatastore : Eager, PostConstruct, PreDestroy, Datastore<HttpClient>
 
     override fun preDestroy()
     {
-        client.close()
-        logger.info("Destroyed CIO http client")
+        client
+            ?.close()
+            ?.apply {
+                logger.info("Destroyed CIO http client")
+            }
     }
 
-    override fun client() = this.client
+    override fun client() = checkNotNull(client) {
+        "RESTDatastore was not initialized properly! Check startup logs for any errors."
+    }
 }
