@@ -5,9 +5,9 @@ import io.liftgate.localize.buckets.YamlResourceBucket
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
+import io.liftgate.mcplugins.toolkit.kompat.getService
 import io.liftgate.mcplugins.toolkit.utilities.FileWatcher
 import io.liftgate.mcplugins.toolkit.utilities.FileWatcherObject
-import jakarta.inject.Inject
 import org.jvnet.hk2.annotations.Service
 import java.io.File
 
@@ -18,9 +18,6 @@ import java.io.File
 @Service
 class LocalizationFeature : CorePluginFeature
 {
-    @Inject
-    lateinit var fileWatcher: FileWatcher
-
     override fun preEnable(plugin: ToolkitPluginContainer)
     {
         val languageDirectory = File(
@@ -32,6 +29,8 @@ class LocalizationFeature : CorePluginFeature
         {
             languageDirectory.mkdirs()
         }
+
+        val fileWatcher = plugin.locator.getService<FileWatcher>()
 
         plugin.locator
             .getAllServices<LocalizationTemplate>()
