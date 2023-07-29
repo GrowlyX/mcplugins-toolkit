@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.hk2;
 
+import lombok.experimental.UtilityClass;
 import org.glassfish.hk2.utilities.binding.ScopedBindingBuilder;
 import org.glassfish.hk2.utilities.binding.ServiceBindingBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -14,10 +15,8 @@ import org.jetbrains.annotations.NotNull;
  * @author GrowlyX
  * @since 6/3/2023
  */
-public enum BindingBuilderUtilities {
-
-    ;
-
+@UtilityClass
+public class BindingBuilderUtilities {
     @SafeVarargs
     public static <T> void bindTo(
             @NotNull ScopedBindingBuilder<T> builder,
