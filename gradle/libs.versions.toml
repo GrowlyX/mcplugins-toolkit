@@ -13,6 +13,8 @@ javax-inject = "1.1"
 commands = "0.5.1-SNAPSHOT"
 ktor = "2.3.1"
 kotlin = "1.9.0"
+lombok-plugin = "5.3.0"
+lombok-api = "1.18.24"
 cache4k = "0.11.0"
 velocity = "3.1.1"
 bearlocalizer = "1.1-SNAPSHOT"
@@ -32,6 +34,10 @@ version.ref = "ktx-serialization-yaml"
 [libraries.platform-spigot-api]
 module = "org.spigotmc:spigot-api"
 version.ref = "spigot"
+
+[libraries.lombok-api]
+module = "org.projectlombok:lombok"
+version.ref = "lombok-api"
 
 [libraries.platform-velocity-api]
 module = "com.velocitypowered:velocity-api"

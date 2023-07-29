@@ -1,5 +1,5 @@
 plugins {
-    id("io.freefair.lombok") version "5.3.0"
+    id("io.freefair.lombok") version libs.versions.lombok.plugin
     id("org.jetbrains.kotlin.plugin.lombok") version libs.versions.kotlin
 }
 
@@ -7,7 +7,14 @@ repositories {
     maven("https://jitpack.io/")
 }
 
+kapt {
+    keepJavacAnnotationProcessors = true
+}
+
 dependencies {
+    compileOnly(libs.lombok.api)
+    annotationProcessor(libs.lombok.api)
+
     compileOnly(libs.commands.core)
     api(libs.cache4k)
 

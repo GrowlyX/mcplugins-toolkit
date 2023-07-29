@@ -103,6 +103,7 @@ abstract class Configuration<T : Any>
             }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun decode(
         inputStream: InputStream
     ): T
