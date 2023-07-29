@@ -15,6 +15,8 @@ Kotlin Minecraft plugin development toolkit.
  - Coroutine plugin framework (via [MCCoroutine](https://github.com/Shynixn/MCCoroutine))
  - Commands (via [ACF](https://github.com/aikar/commands))
  - YAML Configurations
+   - Auto-reload of files
+   - Easy localization via [BearLocalizer](https://github.com/GrowlyX/bearlocalizer)
  - Serialization (via [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization))
    - Custom Spigot serializers
 
@@ -29,7 +31,7 @@ Kotlin Minecraft plugin development toolkit.
 
 ## Platforms:
 - Spigot
-  - _Tested on:_ **1.19**
+  - _Tested on:_ **1.19.4**
   - [Usage Example](https://github.com/GrowlyX/mcplugins-toolkit/tree/master/spigot/example)
 - Velocity
   - _Tested on:_ **3.2.0-SNAPSHOT**
