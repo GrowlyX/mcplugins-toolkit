@@ -2,6 +2,8 @@ package io.liftgate.mcplugins.toolkit.configuration
 
 import com.charleskorn.kaml.Yaml
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
+import io.liftgate.mcplugins.toolkit.utilities.FileWatcher
+import io.liftgate.mcplugins.toolkit.utilities.FileWatcherObject
 import jakarta.inject.Inject
 import kotlinx.serialization.serializer
 import org.glassfish.hk2.api.ServiceLocator
@@ -23,6 +25,10 @@ import kotlin.reflect.KClass
  * and initialize a new instance of the config model. The locator assumes
  * that there is a default no-args constructor present in the model.
  *
+ * On initial injection of the class, a [FileWatcherObject] entry is created
+ * for the [FileWatcher]. When a file change is detected, the underlying instance
+ * is automatically reloaded.
+ *
  * @author GrowlyX
  * @since 6/1/2023
  */
@@ -32,6 +38,7 @@ abstract class Configuration<T : Any>
     abstract fun fileName(): String
     abstract fun type(): KClass<*>
 
+    private var instance: T? = null
     private lateinit var file: File
 
     @Inject
@@ -39,6 +46,13 @@ abstract class Configuration<T : Any>
 
     @Inject
     lateinit var locator: ServiceLocator
+
+    @Inject
+    lateinit var watcher: FileWatcher
+
+    fun instance() = checkNotNull(instance) {
+        "Configuration of ${type().simpleName} was not loaded"
+    }
 
     @Inject
     fun injectPlugin(plugin: ToolkitPlugin)
@@ -50,8 +64,21 @@ abstract class Configuration<T : Any>
 
         if (!file.exists())
         {
-            save(createNewOf())
+            instance = createNewOf()
+            save()
         }
+
+        watcher.watch(
+            FileWatcherObject.builder()
+                .consumer {
+                    load()
+                    plugin.getLogger().info(
+                        "FileWatcher found changes to file ${it.name} and updated the local instance of ${type().simpleName}."
+                    )
+                }
+                .file(file)
+                .build()
+        )
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -62,16 +89,21 @@ abstract class Configuration<T : Any>
         .use {
             decode(it)
         }
+        .apply {
+            instance = this
+        }
 
-    fun save(model: T)
+    fun save()
     {
         file.outputStream()
             .use {
-                encode(it, model)
+                encode(it, checkNotNull(instance) {
+                    "Cannot save an non-existent instance of ${type().simpleName}"
+                })
             }
     }
 
-    fun decode(
+    private fun decode(
         inputStream: InputStream
     ): T
     {
@@ -82,7 +114,7 @@ abstract class Configuration<T : Any>
             ) as T
     }
 
-    fun encode(
+    private fun encode(
         outputStream: OutputStream,
         `object`: T = createNewOf()
     )

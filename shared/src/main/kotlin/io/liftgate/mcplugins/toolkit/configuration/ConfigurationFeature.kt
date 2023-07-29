@@ -45,16 +45,14 @@ class ConfigurationFeature : CorePluginFeature
             .getAllServices<Configuration<*>>()
 
         configurations.forEach { config ->
+            config.load()
+
             pluginBinder(plugin) {
-                bind(
-                    config.load()
-                ).apply {
+                bind(config).apply {
                     BindingBuilderUtilities
                         .bindTo(
                             this,
-                            config.type()
-                                .castToAny()
-                                .java
+                            config.javaClass
                         )
                 }
             }

@@ -4,6 +4,7 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
+import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
 import io.liftgate.mcplugins.toolkit.export.Export
@@ -35,7 +36,7 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
     lateinit var logger: Logger
 
     @Inject
-    lateinit var config: MongoConfig.Model
+    lateinit var configuration: Configuration<MongoConfig.Model>
 
     @Inject
     lateinit var plugin: ToolkitPlugin
@@ -45,6 +46,7 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
 
     override fun postConstruct()
     {
+        val config = configuration.instance()
         val clientSettings = MongoClientSettings
             .builder()
             .uuidRepresentation(UuidRepresentation.STANDARD)

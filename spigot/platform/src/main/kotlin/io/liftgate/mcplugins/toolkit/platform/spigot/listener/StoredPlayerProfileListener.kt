@@ -1,6 +1,7 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.listener
 
 import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
+import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.platform.spigot.profile.ProfileCachingConfig
 import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
@@ -29,7 +30,7 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
     lateinit var plugin: ToolkitSpigotPlugin
 
     @Inject
-    lateinit var cachingConfig: ProfileCachingConfig.Model
+    lateinit var configuration: Configuration<ProfileCachingConfig.Model>
 
     @EventHandler
     suspend fun onPlayerJoin(event: PlayerJoinEvent)
@@ -43,7 +44,7 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
             .cacheStoredProfile(
                 storedProfile = profile
             )
-            
+
         runAsync {
             profileManager
                 .findDuplicates(
@@ -64,6 +65,7 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
 
     override fun postConstruct()
     {
+        val cachingConfig = configuration.instance()
         if (cachingConfig.enabled)
         {
             Bukkit.getPluginManager()
