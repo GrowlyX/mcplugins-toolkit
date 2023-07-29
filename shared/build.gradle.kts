@@ -1,3 +1,8 @@
+plugins {
+    id("io.freefair.lombok") version "5.3.0"
+    id("org.jetbrains.kotlin.plugin.lombok") version libs.versions.kotlin
+}
+
 repositories {
     maven("https://jitpack.io/")
 }

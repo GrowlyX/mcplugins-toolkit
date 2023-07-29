@@ -31,7 +31,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
         val id: String,
         val amount: Int,
         val damage: Short,
-        val itemMeta: ItemMetaSurrogate
+        val itemMeta: ItemMetaSurrogate? = null
     )
 
     @Serializable
@@ -90,7 +90,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
             itemStack.durability = it.damage
 
             val itemMeta = itemStack.itemMeta
-            if (itemMeta != null)
+            if (itemMeta != null && it.itemMeta != null)
             {
                 itemMeta.setDisplayName(it.itemMeta.displayName)
                 itemMeta.lore = it.itemMeta.lore
@@ -206,7 +206,7 @@ class ItemStackSerializer : Serializer<ItemStack>()
                 value.durability,
                 if (value.itemMeta == null)
                 {
-                    ItemMetaSurrogate()
+                    null
                 } else
                 {
                     ItemMetaSurrogate(
