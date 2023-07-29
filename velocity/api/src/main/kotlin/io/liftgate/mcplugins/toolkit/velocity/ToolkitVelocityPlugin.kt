@@ -52,22 +52,22 @@ abstract class ToolkitVelocityPlugin(
     }
 
     @Subscribe
-    fun onProxyInitialization(event: ProxyInitializeEvent)
+    fun ProxyInitializeEvent.on()
     {
         // Create plugin-specific ServiceLocator
         // prior to any enable events being called
         if (!toolkitContainer.onLoad())
-            throw HK2FailedToLoadDescriptorsException(this)
+            throw HK2FailedToLoadDescriptorsException(this@ToolkitVelocityPlugin)
 
         // something did not go well during startup
         if (!toolkitContainer.onEnable())
-            throw PluginFailedToEnableException(this)
+            throw PluginFailedToEnableException(this@ToolkitVelocityPlugin)
 
         pluginEnabled = true
     }
 
     @Subscribe
-    fun onProxyShutdown(event: ProxyShutdownEvent)
+    fun ProxyShutdownEvent.on()
     {
         if (pluginEnabled)
         {

@@ -41,6 +41,7 @@ public class FileWatcher implements PostConstruct, Runnable, PreDestroy, Eager {
             final FileWatcherObject object
     ) {
         synchronized (this.watchedObjects) {
+            object.setLastEditedTimestamp(object.getFile().lastModified());
             this.watchedObjects.add(object);
         }
     }

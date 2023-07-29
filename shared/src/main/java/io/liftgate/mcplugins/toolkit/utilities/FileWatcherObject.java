@@ -11,11 +11,12 @@ import java.io.File;
  */
 @Builder
 @Getter(value = AccessLevel.PACKAGE)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class FileWatcherObject {
     private final @NotNull File file;
     private final @NotNull SafeConsumer<File> consumer;
 
     @Setter
-    private @NotNull Long lastEditedTimestamp = file.lastModified();
+    @Builder.Default
+    private @NotNull Long lastEditedTimestamp = -1L;
 }
