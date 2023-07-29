@@ -52,6 +52,10 @@ public class FileWatcher implements PostConstruct, Runnable, PreDestroy, Eager {
             for (var watchedObject : this.watchedObjects) {
                 var lastModification = watchedObject.getFile().lastModified();
 
+                if (!watchedObject.getFile().exists()) {
+                    continue;
+                }
+
                 if (lastModification != watchedObject.getLastEditedTimestamp()) {
                     watchedObject.setLastEditedTimestamp(lastModification);
 
@@ -70,7 +74,7 @@ public class FileWatcher implements PostConstruct, Runnable, PreDestroy, Eager {
 
     @Override
     public void postConstruct() {
-        this.executorService.schedule(this, 1L, TimeUnit.SECONDS);
+        this.executorService.scheduleAtFixedRate(this, 0L, 1L, TimeUnit.SECONDS);
     }
 
     @Override
