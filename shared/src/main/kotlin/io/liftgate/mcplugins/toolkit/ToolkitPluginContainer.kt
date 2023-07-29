@@ -70,15 +70,6 @@ class ToolkitPluginContainer(
 
     fun onEnable(): Boolean
     {
-        // add local core features (if there are any)
-        CorePluginFeatures += locator
-            .getAllServices<CorePluginFeature>()
-
-        rankedCoreServices()
-            .forEach {
-                it.preEnable(this)
-            }
-
         // bind existing exported services to this ServiceLocator
         pluginBinder(this) {
             ExportedServices
@@ -93,6 +84,15 @@ class ToolkitPluginContainer(
                     }).bindTo(export::class)
                 }
         }
+
+        // add local core features (if there are any)
+        CorePluginFeatures += locator
+            .getAllServices<CorePluginFeature>()
+
+        rankedCoreServices()
+            .forEach {
+                it.preEnable(this)
+            }
 
         // add our own exported services AFTER
         // existing exports are applied.
