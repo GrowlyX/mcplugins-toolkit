@@ -7,12 +7,12 @@ import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
 import io.liftgate.mcplugins.toolkit.export.Export
+import io.liftgate.mcplugins.toolkit.serialization.strippedKMongoSerializationModule
 import jakarta.inject.Inject
 import kotlinx.serialization.json.Json
 import org.glassfish.hk2.api.PostConstruct
 import org.glassfish.hk2.api.PreDestroy
 import org.jvnet.hk2.annotations.Service
-import org.litote.kmongo.serialization.kmongoSerializationModule
 import java.util.logging.Logger
 
 /**
@@ -47,7 +47,7 @@ class RedisDatastore : PostConstruct, PreDestroy, Datastore<RedisFactory>, Eager
             prettyPrint = config.serialization.prettyPrinting
             isLenient = true
             ignoreUnknownKeys = true
-            serializersModule = kmongoSerializationModule
+            serializersModule = strippedKMongoSerializationModule
         }
 
         AwareHub.jsonInstance = jsonInstance

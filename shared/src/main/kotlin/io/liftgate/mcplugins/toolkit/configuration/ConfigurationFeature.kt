@@ -8,8 +8,8 @@ import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
 import io.liftgate.mcplugins.toolkit.pluginBinder
+import io.liftgate.mcplugins.toolkit.serialization.strippedKMongoSerializationModule
 import org.jvnet.hk2.annotations.Service
-import org.litote.kmongo.serialization.kmongoSerializationModule
 
 /**
  * @author GrowlyX
@@ -22,7 +22,7 @@ class ConfigurationFeature : CorePluginFeature
     {
         pluginBinder(plugin) {
             bind(Yaml(
-                serializersModule = kmongoSerializationModule,
+                serializersModule = strippedKMongoSerializationModule,
                 configuration = YamlConfiguration(
                     yamlNamingStrategy = YamlNamingStrategy.SnakeCase, // dash-split keys
                     strictMode = false // ignores any unknown, or non-existent keys

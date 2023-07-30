@@ -2,8 +2,10 @@ package io.liftgate.mcplugins.toolkit.platform.spigot.example.commands
 
 import co.aikar.commands.annotation.CommandAlias
 import co.aikar.commands.annotation.CommandPermission
+import com.github.jershell.kbson.UUIDSerializer
 import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.model.PlayerDataManager
+import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -39,7 +41,7 @@ class ExampleCommands : ToolkitCommand()
         runBlocking {
             sender.sendMessage("=== Top 10 deaths ===")
 
-            withContext(Dispatchers.IO) {
+            runAsync {
                 manager.aggregateTop10KillsEntries()
                     .forEachIndexed { index, result ->
                         sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")

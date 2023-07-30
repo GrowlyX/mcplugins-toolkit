@@ -6,8 +6,21 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.modules.SerializersModule
+import org.litote.kmongo.serialization.kmongoSerializationModule
+import org.litote.kmongo.serialization.registerModule
 import java.time.Instant
 import java.util.*
+
+val strippedKMongoSerializationModule: SerializersModule
+    get()
+    {
+        return SerializersModule {
+            registerModule(kmongoSerializationModule)
+            contextual(UUID::class, UUIDSerializer)
+            contextual(Instant::class, InstantSerializer)
+        }
+    }
 
 object UUIDSerializer : KSerializer<UUID>
 {
