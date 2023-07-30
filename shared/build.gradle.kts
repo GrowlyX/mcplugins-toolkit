@@ -21,6 +21,8 @@ dependencies {
     api(libs.datastore.lettuce)
     api(libs.datastore.kmongo)
 
+    api(libs.aware.ktx)
+
     api(libs.ktx.coroutines.core)
     api(libs.ktx.coroutines.jdk8)
     api(libs.ktx.serialization.json)
