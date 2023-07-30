@@ -3,6 +3,7 @@ package io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer
 import io.liftgate.localize.annotate.*
 import io.liftgate.localize.identity.Identity
 import io.liftgate.mcplugins.toolkit.localizer.LocalizationTemplate
+import org.bukkit.entity.Player
 import org.jvnet.hk2.annotations.Service
 import kotlin.reflect.KClass
 
@@ -30,6 +31,10 @@ interface CoreLang
         player: Identity,
         reason: String
     ): List<String>
+
+    @Colored
+    @DefaultsTo("&b[Staff] &b%username% &3left the server.")
+    fun staffLogin(username: String): List<String>
 }
 
 @Service

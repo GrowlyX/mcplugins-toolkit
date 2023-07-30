@@ -1,5 +1,7 @@
 package io.liftgate.mcplugins.toolkit
 
+import gg.scala.aware.Aware
+import gg.scala.aware.message.Message
 import io.liftgate.mcplugins.toolkit.hk2.BindingBuilderUtilities
 import kotlinx.coroutines.runBlocking
 import org.glassfish.hk2.utilities.binding.ScopedBindingBuilder
@@ -18,6 +20,8 @@ inline fun <reified T> ToolkitPluginContainer.getDescriptors() =
                     T::class.java.name
                 )
         }
+
+fun Aware<Message>.message(id: String) = Message(this, id)
 
 fun runBlockingUnsafe(
     exceptionCaught: (Throwable) -> Unit,

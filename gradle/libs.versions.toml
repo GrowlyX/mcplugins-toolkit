@@ -19,7 +19,7 @@ cache4k = "0.11.0"
 velocity = "3.1.1"
 bearlocalizer = "1.1-SNAPSHOT"
 eoyaml = "7.0.8"
-aware-ktx = "76e01c2f38"
+aware-ktx = "99d7c32bbc"
 
 plugins-shadow = "7.1.2"
 plugins-idea-ext = "1.1.6"

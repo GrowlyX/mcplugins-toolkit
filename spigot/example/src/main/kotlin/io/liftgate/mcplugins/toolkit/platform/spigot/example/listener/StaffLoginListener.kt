@@ -1,7 +1,11 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.example.listener
 
+import io.liftgate.localize.Localizer
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.redis.RedisDatastore
+import io.liftgate.mcplugins.toolkit.message
+import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLang
+import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLangService
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfileManager
 import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject
@@ -40,15 +44,18 @@ class StaffLoginListener : CoroutineListener, Eager, PostConstruct
                     get<UUID>("player")
                 )
 
-            Bukkit.broadcastMessage(
-                "${ChatColor.AQUA}[Staff] ${ChatColor.GREEN}${profile.username}${ChatColor.WHITE} joined!"
-            )
+            Localizer.of<CoreLang>()
+                .staffLogin(profile.username)
+                .forEach(Bukkit::broadcastMessage)
         }
     }
 
     @EventHandler
     suspend fun PlayerJoinEvent.on()
     {
-        // TODO:  
+        connection
+            .message("login")
+            .set("player", player.uniqueId)
+            .publish()
     }
 }
