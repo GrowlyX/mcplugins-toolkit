@@ -111,8 +111,6 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
             val usernameNoLongerMatches =
                 previousUsername != profile.username
 
-            println("Prev: $previousUsername. New: ${profile.username}")
-
             if (usernameNoLongerMatches)
             {
                 save(profile)
