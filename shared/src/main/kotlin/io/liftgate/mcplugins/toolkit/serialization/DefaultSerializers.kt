@@ -7,19 +7,22 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.overwriteWith
 import org.litote.kmongo.serialization.kmongoSerializationModule
-import org.litote.kmongo.serialization.registerModule
 import java.time.Instant
 import java.util.*
+
+private val defaultSerializationModule = SerializersModule {
+    contextual(UUID::class, UUIDSerializer)
+    contextual(Instant::class, InstantSerializer)
+}
 
 val strippedKMongoSerializationModule: SerializersModule
     get()
     {
-        return SerializersModule {
-            registerModule(kmongoSerializationModule)
-            contextual(UUID::class, UUIDSerializer)
-            contextual(Instant::class, InstantSerializer)
-        }
+        return kmongoSerializationModule.overwriteWith(
+            defaultSerializationModule
+        )
     }
 
 object UUIDSerializer : KSerializer<UUID>
