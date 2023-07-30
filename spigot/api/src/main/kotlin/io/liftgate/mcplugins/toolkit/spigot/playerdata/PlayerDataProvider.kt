@@ -1,12 +1,10 @@
 package io.liftgate.mcplugins.toolkit.spigot.playerdata
 
-import com.github.jershell.kbson.UUIDSerializer
 import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
 import com.mongodb.client.model.Filters
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.playerdata.PlayerData
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
-import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -14,6 +12,7 @@ import kotlinx.coroutines.withContext
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerLoginEvent
@@ -35,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @since 5/31/2023
  */
 @Contract
-abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConstruct, Eager
+abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eager
 {
     private val playerProfileCache =
         ConcurrentHashMap<UUID, T>(1024)
@@ -103,21 +102,18 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     {
         val profile = find(event.player)
 
-        if (event.player.name.isNotEmpty())
+        val previousUsername = profile.username
+        profile.username = event.player.name
+
+        val usernameNoLongerMatches =
+            previousUsername != profile.username
+
+        if (usernameNoLongerMatches)
         {
-            val previousUsername = profile.username
-            profile.username = event.player.name
-
-            val usernameNoLongerMatches =
-                previousUsername != profile.username
-
-            if (usernameNoLongerMatches)
-            {
-                save(profile)
-                plugin.logger.info(
-                    "Pushing username update for ${profile.uniqueId}"
-                )
-            }
+            save(profile)
+            plugin.logger.info(
+                "Pushing username update for ${profile.uniqueId}"
+            )
         }
     }
 
