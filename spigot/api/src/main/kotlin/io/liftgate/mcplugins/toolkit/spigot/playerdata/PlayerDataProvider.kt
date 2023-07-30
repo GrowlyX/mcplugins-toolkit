@@ -14,6 +14,7 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.glassfish.hk2.api.PostConstruct
@@ -69,22 +70,37 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
                         event.uniqueId.toString()
                     )
                 )
+                ?.apply {
+                    onLoad()
+                }
                 ?: createNew(event.uniqueId)
+                    .apply {
+                        onInitialCreation()
+                        onLoad()
+
+                        save(profile = this)
+                    }
 
             playerProfileCache[event.uniqueId] = playerProfile
         }
     }
 
     @EventHandler
-    suspend fun onPlayerLogin(event: PlayerLoginEvent)
+    fun onPlayerLogin(event: PlayerLoginEvent)
     {
-        val profile = findNullable(event.player)
+        findNullable(event.player)
             ?: return run {
                 event.disallow(
                     PlayerLoginEvent.Result.KICK_OTHER,
                     "${ChatColor.RED}Your profile failed to load!"
                 )
             }
+    }
+
+    @EventHandler
+    suspend fun onPlayerJoin(event: PlayerJoinEvent)
+    {
+        val profile = find(event.player)
 
         val previousUsername = profile.username
         profile.username = event.player.name
@@ -95,7 +111,9 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
         if (usernameNoLongerMatches)
         {
             save(profile)
-            plugin.logger.info("Pushing username update for ${profile.uniqueId}")
+            plugin.logger.info(
+                "Pushing username update for ${profile.uniqueId}"
+            )
         }
     }
 
@@ -104,6 +122,9 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     {
         val playerProfile = playerProfileCache
             .remove(event.player.uniqueId)
+            ?.apply {
+                onDestroy()
+            }
             ?: return
         save(profile = playerProfile)
     }

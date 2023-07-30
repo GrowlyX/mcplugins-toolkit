@@ -13,4 +13,19 @@ interface PlayerData
 {
     val uniqueId: UUID
     var username: String
+
+    suspend fun onInitialCreation()
+    {
+
+    }
+
+    suspend fun onLoad()
+    {
+
+    }
+
+    suspend fun onDestroy()
+    {
+
+    }
 }

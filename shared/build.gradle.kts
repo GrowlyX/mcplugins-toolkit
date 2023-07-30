@@ -3,10 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.lombok") version libs.versions.kotlin
 }
 
-repositories {
-    maven("https://jitpack.io/")
-}
-
 kapt {
     keepJavacAnnotationProcessors = true
 }

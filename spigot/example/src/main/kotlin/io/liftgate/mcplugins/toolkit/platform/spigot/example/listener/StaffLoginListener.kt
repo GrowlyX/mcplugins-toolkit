@@ -5,17 +5,15 @@ import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.redis.RedisDatastore
 import io.liftgate.mcplugins.toolkit.message
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLang
-import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLangService
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfileManager
 import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
 import jakarta.inject.Inject
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
-import java.util.UUID
+import java.util.*
 
 /**
  * @author GrowlyX

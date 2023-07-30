@@ -21,15 +21,11 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven {
-            url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-        }
-        maven {
-            url = uri("https://repo.aikar.co/content/groups/aikar/")
-        }
-        maven {
-            url = uri("https://repo.papermc.io/repository/maven-public/")
-        }
+
+        maven("https://jitpack.io/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://repo.aikar.co/content/groups/aikar/")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 
