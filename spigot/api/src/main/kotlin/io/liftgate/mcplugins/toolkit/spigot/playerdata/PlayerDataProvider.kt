@@ -102,18 +102,21 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     {
         val profile = find(event.player)
 
-        val previousUsername = profile.username
-        profile.username = event.player.name
-
-        val usernameNoLongerMatches =
-            previousUsername != profile.username
-
-        if (usernameNoLongerMatches)
+        if (event.player.name.isNotEmpty())
         {
-            save(profile)
-            plugin.logger.info(
-                "Pushing username update for ${profile.uniqueId}"
-            )
+            val previousUsername = profile.username
+            profile.username = event.player.name
+
+            val usernameNoLongerMatches =
+                previousUsername != profile.username
+
+            if (usernameNoLongerMatches)
+            {
+                save(profile)
+                plugin.logger.info(
+                    "Pushing username update for ${profile.uniqueId}"
+                )
+            }
         }
     }
 
