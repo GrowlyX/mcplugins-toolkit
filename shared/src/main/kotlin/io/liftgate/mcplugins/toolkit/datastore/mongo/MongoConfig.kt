@@ -13,6 +13,7 @@ class MongoConfig : Configuration<MongoConfig.Model>()
 {
     @Serializable
     data class Model(
+        val enabled: Boolean = true,
         val uri: String = "mongodb://127.0.0.1:27017",
         val database: String = "experimental",
         val credentials: Credentials = Credentials()

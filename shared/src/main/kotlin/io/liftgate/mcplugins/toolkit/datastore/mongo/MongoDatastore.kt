@@ -8,7 +8,6 @@ import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
 import io.liftgate.mcplugins.toolkit.export.Export
-import io.liftgate.mcplugins.toolkit.runBlockingUnsafe
 import jakarta.inject.Inject
 import org.bson.UuidRepresentation
 import org.glassfish.hk2.api.PostConstruct
@@ -18,7 +17,6 @@ import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
-import java.util.logging.Level
 import java.util.logging.Logger
 
 /**
@@ -64,6 +62,12 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
                         config.credentials.password.toCharArray()
                     )
                 )
+        }
+
+        if (!config.enabled)
+        {
+            logger.info("Skipping datastore initialization for MongoDB. This may cause plugin compatibility issues!")
+            return
         }
 
         client = KMongo
