@@ -11,6 +11,8 @@ import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.serialization.SerializationClassMappingTypeService
 import org.litote.kmongo.serialization.kmongoSerializationModule
 import org.litote.kmongo.serialization.registerModule
+import java.time.Instant
+import java.util.*
 
 /**
  * @author GrowlyX
@@ -36,6 +38,9 @@ class SerializationFeature : CorePluginFeature
             serializers.forEach { serializer ->
                 contextual(serializer.type()) { serializer }
             }
+
+            contextual(UUID::class, UUIDSerializer)
+            contextual(Instant::class, InstantSerializer)
         }
 
         registerModule(customSerializerModule)

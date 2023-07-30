@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.spigot.playerdata
 
+import com.github.jershell.kbson.UUIDSerializer
 import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
 import com.mongodb.client.model.Filters
 import io.liftgate.mcplugins.toolkit.contracts.Eager
@@ -102,18 +103,23 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     {
         val profile = find(event.player)
 
-        val previousUsername = profile.username
-        profile.username = event.player.name
-
-        val usernameNoLongerMatches =
-            previousUsername != profile.username
-
-        if (usernameNoLongerMatches)
+        if (event.player.name.isNotEmpty())
         {
-            save(profile)
-            plugin.logger.info(
-                "Pushing username update for ${profile.uniqueId}"
-            )
+            val previousUsername = profile.username
+            profile.username = event.player.name
+
+            val usernameNoLongerMatches =
+                previousUsername != profile.username
+
+            println("Prev: $previousUsername. New: ${profile.username}")
+
+            if (usernameNoLongerMatches)
+            {
+                save(profile)
+                plugin.logger.info(
+                    "Pushing username update for ${profile.uniqueId}"
+                )
+            }
         }
     }
 
@@ -126,6 +132,7 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
                 onDestroy()
             }
             ?: return
+
         save(profile = playerProfile)
     }
 
