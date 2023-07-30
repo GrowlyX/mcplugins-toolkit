@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
+import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.datastore.Datastore
 import io.liftgate.mcplugins.toolkit.export.Export
@@ -28,18 +29,22 @@ class RESTDatastore : Eager, PostConstruct, PreDestroy, Datastore<HttpClient>
 
     private var client: HttpClient? = null
 
+    @Inject
+    lateinit var configuration: Configuration<RESTConfig.Model>
+
     override fun postConstruct()
     {
+        val restConfig = configuration.instance()
         client = HttpClient(CIO) {
             engine {
-                threadsCount = 2
-                pipelining = false
-                requestTimeout = 10_000
+                threadsCount = restConfig.threadCount
+                pipelining = restConfig.pipelining
+                requestTimeout = restConfig.defaultRequestTimeout
             }
 
             install(ContentNegotiation) {
                 json(Json {
-                    prettyPrint = true
+                    prettyPrint = restConfig.jsonPrettyPrinting
                     isLenient = true
                     ignoreUnknownKeys = true
                     serializersModule = kmongoSerializationModule
