@@ -12,9 +12,14 @@ import org.litote.kmongo.serialization.kmongoSerializationModule
 import java.time.Instant
 import java.util.*
 
+/**
+ * Overrides KMongo's DefaultModule with our own, non-bson, serializers
+ * for support for non-Mongo use-cases.
+ */
 private val defaultSerializationModule = SerializersModule {
     contextual(UUID::class, UUIDSerializer)
     contextual(Instant::class, InstantSerializer)
+    contextual(Date::class, DateSerializer)
 }
 
 val strippedKMongoSerializationModule: SerializersModule
@@ -50,5 +55,18 @@ object InstantSerializer : KSerializer<Instant>
     override fun serialize(encoder: Encoder, value: Instant)
     {
         encoder.encodeString(value.toString())
+    }
+}
+
+object DateSerializer : KSerializer<Date>
+{
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DateSerializer", PrimitiveKind.LONG)
+
+    override fun deserialize(decoder: Decoder): Date = Date(decoder.decodeLong())
+
+    override fun serialize(encoder: Encoder, value: Date)
+    {
+        encoder.encodeLong(value.time)
     }
 }
