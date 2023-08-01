@@ -10,7 +10,9 @@ import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
 import io.liftgate.mcplugins.toolkit.datastore.restful.RESTDatastore
 import io.liftgate.mcplugins.toolkit.export.Export
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.and
@@ -89,14 +91,16 @@ class StoredPlayerProfileManager : Eager, PostConstruct
     }
 
     suspend fun findDuplicates(username: String, id: UUID) =
-        collection
-            .find(
-                and(
-                    StoredPlayerProfile::username eq username,
-                    StoredPlayerProfile::uniqueId ne id
+        withContext(Dispatchers.IO) {
+            collection
+                .find(
+                    and(
+                        StoredPlayerProfile::username eq username,
+                        StoredPlayerProfile::uniqueId ne id
+                    )
                 )
-            )
-            .toList()
+                .toList()
+        }
 
     suspend fun cacheStoredProfile(storedProfile: StoredPlayerProfile)
     {
@@ -109,32 +113,40 @@ class StoredPlayerProfileManager : Eager, PostConstruct
 
     suspend fun loadProfileFromUniqueIdNullable(uniqueId: UUID) =
         idToProfileMappings.get(uniqueId)
-            ?: collection
-                .findOne(
-                    StoredPlayerProfile::uniqueId eq uniqueId
+            ?: withContext(Dispatchers.IO) {
+                collection
+                    .findOne(
+                        StoredPlayerProfile::uniqueId eq uniqueId
+                    )
+                    ?.apply {
+                        populateLocalCaches(this)
+                    }
+            }
+            ?: withContext(Dispatchers.IO) {
+                parseAndCacheAPILoadedProfile(
+                    loadAPIProfileFromUniqueId(uniqueId)
                 )
-                ?.apply {
-                    populateLocalCaches(this)
-                }
-            ?: parseAndCacheAPILoadedProfile(
-                loadAPIProfileFromUniqueId(uniqueId)
-            )
+            }
 
     suspend fun loadProfileFromUsername(username: String) =
         loadProfileFromUsernameNullable(username)!!
 
     suspend fun loadProfileFromUsernameNullable(username: String) =
         nameToProfileMappings.get(username.lowercase())
-            ?: collection
-                .findOne(
-                    StoredPlayerProfile::username eq username
+            ?: withContext(Dispatchers.IO) {
+                collection
+                    .findOne(
+                        StoredPlayerProfile::username eq username
+                    )
+                    ?.apply {
+                        populateLocalCaches(this)
+                    }
+            }
+            ?: withContext(Dispatchers.IO) {
+                parseAndCacheAPILoadedProfile(
+                    loadAPIProfileFromUsername(username)
                 )
-                ?.apply {
-                    populateLocalCaches(this)
-                }
-            ?: parseAndCacheAPILoadedProfile(
-                loadAPIProfileFromUsername(username)
-            )
+            }
 
     private fun populateLocalCaches(profile: StoredPlayerProfile)
     {
