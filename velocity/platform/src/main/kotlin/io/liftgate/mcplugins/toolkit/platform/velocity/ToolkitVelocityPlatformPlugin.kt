@@ -1,6 +1,5 @@
 package io.liftgate.mcplugins.toolkit.platform.velocity
 
-import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
@@ -17,12 +16,9 @@ import java.nio.file.Path
     version = "1.0.0"
 )
 class ToolkitVelocityPlatformPlugin @Inject constructor(
-    suspendingPluginContainer: SuspendingPluginContainer,
     @DataDirectory
     directory: Path
-) : ToolkitVelocityPlugin(
-    suspendingPluginContainer, directory
-)
+) : ToolkitVelocityPlugin(directory)
 {
     companion object
     {

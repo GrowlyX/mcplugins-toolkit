@@ -1,6 +1,5 @@
 package io.liftgate.mcplugins.toolkit.platform.velocity.example
 
-import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
 import com.velocitypowered.api.plugin.Dependency
 import com.velocitypowered.api.plugin.Plugin
@@ -21,9 +20,6 @@ import java.nio.file.Path
     ]
 )
 class ExampleVelocityPlugin @Inject constructor(
-    suspendingPluginContainer: SuspendingPluginContainer,
     @DataDirectory
     directory: Path
-) : ToolkitVelocityPlugin(
-    suspendingPluginContainer, directory
-)
+) : ToolkitVelocityPlugin(directory)

@@ -49,7 +49,7 @@ class LocalizationFeature : CorePluginFeature
                 val bucket = YamlResourceBucket(it.langClass, file)
                 val createLocalizationTemplate = {
                     Localizer.registry.remove(it.langClass)
-                    Localizer.of(it.langClass) { bucket }
+                    Localizer.of(it.langClass.java) { bucket }
                 }
 
                 fileWatcher.watch(

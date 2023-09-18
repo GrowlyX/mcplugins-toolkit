@@ -1,10 +1,8 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.listener
 
-import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
 import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.platform.spigot.profile.ProfileCachingConfig
-import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfile
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfileManager
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
@@ -15,6 +13,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
+import java.util.concurrent.CompletableFuture.runAsync
 
 /**
  * @author GrowlyX
@@ -33,7 +32,7 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
     lateinit var configuration: Configuration<ProfileCachingConfig.Model>
 
     @EventHandler
-    suspend fun onPlayerJoin(event: PlayerJoinEvent)
+    fun onPlayerJoin(event: PlayerJoinEvent)
     {
         val profile = StoredPlayerProfile(
             uniqueId = event.player.uniqueId,
@@ -69,7 +68,7 @@ class StoredPlayerProfileListener : Eager, PostConstruct, Listener
         if (cachingConfig.enabled)
         {
             Bukkit.getPluginManager()
-                .registerSuspendingEvents(
+                .registerEvents(
                     this, plugin
                 )
         }

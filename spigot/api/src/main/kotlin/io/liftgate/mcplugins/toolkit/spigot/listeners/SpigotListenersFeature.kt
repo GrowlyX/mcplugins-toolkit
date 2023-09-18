@@ -10,7 +10,7 @@ import org.jvnet.hk2.annotations.Service
 
 /**
  * A core plugin feature eagerly registering suspending
- * events in [CoroutineListener]s.
+ * events in [ToolkitListener]s.
  *
  * @author GrowlyX
  * @since 5/31/2023
@@ -23,7 +23,7 @@ class SpigotListenersFeature : CorePluginFeature
         val mcPlugin = plugin.plugin as ToolkitSpigotPlugin
 
         val listeners = plugin.locator
-            .getAllServices<CoroutineListener>()
+            .getAllServices<ToolkitListener>()
 
         listeners.forEach {
             mcPlugin.server.pluginManager
@@ -34,7 +34,7 @@ class SpigotListenersFeature : CorePluginFeature
     override fun preDisable(plugin: ToolkitPluginContainer)
     {
         val listeners = plugin.locator
-            .getAllServices<CoroutineListener>()
+            .getAllServices<ToolkitListener>()
 
         listeners.forEach {
             HandlerList.unregisterAll(it)

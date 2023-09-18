@@ -1,6 +1,6 @@
 package io.liftgate.mcplugins.toolkit.velocity.playerdata
 
-import com.github.shynixn.mccoroutine.velocity.registerSuspend
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import com.velocitypowered.api.event.ResultedEvent
 import com.velocitypowered.api.event.Subscribe
@@ -10,7 +10,7 @@ import com.velocitypowered.api.proxy.Player
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.playerdata.PlayerData
 import io.liftgate.mcplugins.toolkit.velocity.ToolkitVelocityPlugin
-import io.liftgate.mcplugins.toolkit.velocity.listeners.CoroutineListener
+import io.liftgate.mcplugins.toolkit.velocity.listeners.ToolkitListener
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,8 +18,10 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Contract
-import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.findOne
+import org.litote.kmongo.save
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -30,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @since 5/31/2023
  */
 @Contract
-abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConstruct, Eager
+abstract class PlayerDataProvider<T : PlayerData> : ToolkitListener, PostConstruct, Eager
 {
     private val playerProfileCache =
         ConcurrentHashMap<UUID, T>(1024)
@@ -40,7 +42,7 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
 
     private var readOnlyCopies = false
 
-    abstract fun collection(): CoroutineCollection<T>
+    abstract fun collection(): MongoCollection<T>
     abstract fun createNew(uniqueId: UUID): T
 
     fun findNullable(uniqueId: UUID) = playerProfileCache[uniqueId]
@@ -57,13 +59,13 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     override fun postConstruct()
     {
         plugin.server.eventManager
-            .registerSuspend(
+            .register(
                 plugin, this
             )
     }
 
     @Subscribe
-    suspend fun onPlayerPreLogin(event: LoginEvent)
+    fun onPlayerPreLogin(event: LoginEvent)
     {
         runCatching {
             val playerProfile = collection()
@@ -100,7 +102,7 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
     }
 
     @Subscribe
-    suspend fun onPlayerQuit(event: DisconnectEvent)
+    fun onPlayerQuit(event: DisconnectEvent)
     {
         val playerProfile = playerProfileCache
             .remove(event.player.uniqueId)
@@ -108,14 +110,14 @@ abstract class PlayerDataProvider<T : PlayerData> : CoroutineListener, PostConst
         save(profile = playerProfile)
     }
 
-    suspend fun save(profile: T)
+    fun save(profile: T): CompletableFuture<Void>
     {
         if (readOnlyCopies)
         {
-            return
+            return CompletableFuture.completedFuture(null)
         }
 
-        withContext(Dispatchers.IO) {
+        return CompletableFuture.runAsync {
             collection().save(profile)
         }
     }

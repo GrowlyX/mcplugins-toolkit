@@ -7,6 +7,10 @@ kapt {
     keepJavacAnnotationProcessors = true
 }
 
+repositories {
+    maven(url = "https://jitpack.io")
+}
+
 dependencies {
     compileOnly(libs.lombok.api)
     annotationProcessor(libs.lombok.api)
@@ -19,8 +23,6 @@ dependencies {
 
     api(libs.aware.ktx)
 
-    api(libs.ktx.coroutines.core)
-    api(libs.ktx.coroutines.jdk8)
     api(libs.ktx.serialization.json)
     api(libs.ktx.serialization.yaml)
     api(libs.ktx.datetime)

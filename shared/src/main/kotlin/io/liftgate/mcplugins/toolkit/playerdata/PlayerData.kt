@@ -1,6 +1,7 @@
 package io.liftgate.mcplugins.toolkit.playerdata
 
 import java.util.*
+import java.util.concurrent.CompletableFuture
 
 /**
  * A template for all Minecraft player
@@ -14,18 +15,18 @@ interface PlayerData
     val uniqueId: UUID
     var username: String
 
-    suspend fun onInitialCreation()
+    fun onInitialCreationAsync(): CompletableFuture<Void>
     {
-
+        return CompletableFuture.completedFuture(null)
     }
 
-    suspend fun onLoad()
+    fun onLoadAsync(): CompletableFuture<Void>
     {
-
+        return CompletableFuture.completedFuture(null)
     }
 
-    suspend fun onDestroy()
+    fun onDestroy(): CompletableFuture<Void>
     {
-
+        return CompletableFuture.completedFuture(null)
     }
 }

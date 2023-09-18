@@ -17,7 +17,7 @@ lombok-plugin = "5.3.0"
 lombok-api = "1.18.24"
 cache4k = "0.11.0"
 velocity = "3.1.1"
-bearlocalizer = "1.2-SNAPSHOT"
+bearlocalizer = "7fb619d0ec"
 eoyaml = "7.0.8"
 aware-ktx = "daffffc06e"
 
@@ -52,37 +52,13 @@ version.ref = "velocity"
 module = "org.spigotmc:plugin-annotations"
 version.ref = "spigot-annotate"
 
-[libraries.mccoroutine-bukkit-api]
-module = "com.github.shynixn.mccoroutine:mccoroutine-bukkit-api"
-version.ref = "mccoroutine"
-
-[libraries.mccoroutine-bukkit-core]
-module = "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core"
-version.ref = "mccoroutine"
-
-[libraries.mccoroutine-velocity-api]
-module = "com.github.shynixn.mccoroutine:mccoroutine-velocity-api"
-version.ref = "mccoroutine"
-
-[libraries.mccoroutine-velocity-core]
-module = "com.github.shynixn.mccoroutine:mccoroutine-velocity-core"
-version.ref = "mccoroutine"
-
 [libraries.datastore-kmongo]
-module = "org.litote.kmongo:kmongo-coroutine-serialization"
+module = "org.litote.kmongo:kmongo-serialization"
 version.ref = "kmongo"
 
 [libraries.datastore-lettuce]
 module = "io.lettuce:lettuce-core"
 version.ref = "lettuce-core"
-
-[libraries.ktx-coroutines-core]
-module = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
-version.ref = "ktx-coroutines"
-
-[libraries.ktx-coroutines-jdk8]
-module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8"
-version.ref = "ktx-coroutines"
 
 [libraries.ktx-datetime]
 module = "org.jetbrains.kotlinx:kotlinx-datetime"
@@ -97,7 +73,7 @@ module = "org.glassfish.hk2:hk2-metadata-generator"
 version.ref = "hk2"
 
 [libraries.bearlocalizer]
-module = "io.liftgate.localize:bearlocalizer"
+module = "com.github.GrowlyX:bearlocalizer"
 version.ref = "bearlocalizer"
 
 [libraries.eoyaml]

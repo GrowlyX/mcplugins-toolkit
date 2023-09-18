@@ -3,6 +3,8 @@ package io.liftgate.mcplugins.toolkit.datastore.mongo
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoDatabase
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.configuration.Configuration
 import io.liftgate.mcplugins.toolkit.contracts.Eager
@@ -13,10 +15,7 @@ import org.bson.UuidRepresentation
 import org.glassfish.hk2.api.PostConstruct
 import org.glassfish.hk2.api.PreDestroy
 import org.jvnet.hk2.annotations.Service
-import org.litote.kmongo.coroutine.CoroutineClient
-import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.coroutine.coroutine
-import org.litote.kmongo.reactivestreams.KMongo
+import org.litote.kmongo.KMongo
 import java.util.logging.Logger
 
 /**
@@ -28,7 +27,7 @@ import java.util.logging.Logger
  */
 @Export
 @Service
-class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, Eager
+class MongoDatastore : PostConstruct, PreDestroy, Datastore<MongoDatabase>, Eager
 {
     @Inject
     lateinit var logger: Logger
@@ -39,8 +38,8 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
     @Inject
     lateinit var plugin: ToolkitPlugin
 
-    private var client: CoroutineClient? = null
-    private var database: CoroutineDatabase? = null
+    private var client: MongoClient? = null
+    private var database: MongoDatabase? = null
 
     override fun postConstruct()
     {
@@ -74,7 +73,6 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<CoroutineDatabase>, 
             .createClient(
                 clientSettings.build()
             )
-            .coroutine
 
         database = client
             ?.getDatabase(config.database)

@@ -1,5 +1,6 @@
 package io.liftgate.mcplugins.toolkit.profile
 
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Collation
 import com.mongodb.client.model.IndexOptions
 import io.github.reactivecircus.cache4k.Cache
@@ -15,12 +16,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Service
-import org.litote.kmongo.and
-import org.litote.kmongo.ascending
-import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.eq
-import org.litote.kmongo.ne
+import org.litote.kmongo.*
 import java.util.*
+import java.util.concurrent.CompletableFuture.runAsync
 import java.util.logging.Logger
 import kotlin.time.Duration.Companion.minutes
 
@@ -56,7 +54,7 @@ class StoredPlayerProfileManager : Eager, PostConstruct
     @Inject
     lateinit var logger: Logger
 
-    private lateinit var collection: CoroutineCollection<StoredPlayerProfile>
+    private lateinit var collection: MongoCollection<StoredPlayerProfile>
 
     private val idToProfileMappings = Cache.Builder<UUID, StoredPlayerProfile>()
         .expireAfterWrite(LOCAL_EXPIRATION_DURATION)
@@ -90,63 +88,55 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         }
     }
 
-    suspend fun findDuplicates(username: String, id: UUID) =
-        withContext(Dispatchers.IO) {
-            collection
-                .find(
-                    and(
-                        StoredPlayerProfile::username eq username,
-                        StoredPlayerProfile::uniqueId ne id
-                    )
+    fun findDuplicates(username: String, id: UUID) =
+        collection
+            .find(
+                and(
+                    StoredPlayerProfile::username eq username,
+                    StoredPlayerProfile::uniqueId ne id
                 )
-                .toList()
-        }
+            )
+            .toList()
 
-    suspend fun cacheStoredProfile(storedProfile: StoredPlayerProfile)
+    fun cacheStoredProfile(storedProfile: StoredPlayerProfile)
     {
         populateLocalCaches(storedProfile)
         collection.save(storedProfile)
     }
 
-    suspend fun loadProfileFromUniqueId(uniqueId: UUID) =
+    fun loadProfileFromUniqueId(uniqueId: UUID) =
         loadProfileFromUniqueIdNullable(uniqueId)!!
 
-    suspend fun loadProfileFromUniqueIdNullable(uniqueId: UUID) =
+    fun loadProfileFromUniqueIdNullable(uniqueId: UUID) = runAsync {
         idToProfileMappings.get(uniqueId)
-            ?: withContext(Dispatchers.IO) {
-                collection
-                    .findOne(
-                        StoredPlayerProfile::uniqueId eq uniqueId
-                    )
-                    ?.apply {
-                        populateLocalCaches(this)
-                    }
-            }
-            ?: withContext(Dispatchers.IO) {
-                parseAndCacheAPILoadedProfile(
-                    loadAPIProfileFromUniqueId(uniqueId)
+            ?: collection
+                .findOne(
+                    StoredPlayerProfile::uniqueId eq uniqueId
                 )
-            }
+                ?.apply {
+                    populateLocalCaches(this)
+                }
+            ?: parseAndCacheAPILoadedProfile(
+                loadAPIProfileFromUniqueId(uniqueId)
+            )
+    }
 
-    suspend fun loadProfileFromUsername(username: String) =
+    fun loadProfileFromUsername(username: String) =
         loadProfileFromUsernameNullable(username)!!
 
-    suspend fun loadProfileFromUsernameNullable(username: String) =
+    fun loadProfileFromUsernameNullable(username: String) = runAsync {
         nameToProfileMappings.get(username.lowercase())
-            ?: withContext(Dispatchers.IO) {
-                collection
-                    .findOne(
-                        StoredPlayerProfile::username eq username
-                    )
-                    ?.apply {
-                        populateLocalCaches(this)
-                    }
-            }
-            ?: withContext(Dispatchers.IO) {
-                parseAndCacheAPILoadedProfile(
-                    loadAPIProfileFromUsername(username)
+            ?: collection
+                .findOne(
+                    StoredPlayerProfile::username eq username
                 )
-            }
+                ?.apply {
+                    populateLocalCaches(this)
+                }
+            ?: parseAndCacheAPILoadedProfile(
+                loadAPIProfileFromUsername(username)
+            )
+    }
 
     private fun populateLocalCaches(profile: StoredPlayerProfile)
     {
@@ -154,7 +144,7 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         nameToProfileMappings.put(profile.username.lowercase(), profile)
     }
 
-    private suspend fun parseAndCacheAPILoadedProfile(
+    private fun parseAndCacheAPILoadedProfile(
         apiLoaded: MojangPlayerProfile?
     ): StoredPlayerProfile?
     {
@@ -178,17 +168,19 @@ class StoredPlayerProfileManager : Eager, PostConstruct
         return storedProfile
     }
 
-    suspend fun loadAPIProfileFromUsername(username: String) =
+    fun loadAPIProfileFromUsername(username: String) = runBlocking {
         rest.client()
             .get(
                 MOJANG_USERNAME_ENDPOINT.format(username)
             )
             .body<MojangPlayerProfile?>()
+    }
 
-    suspend fun loadAPIProfileFromUniqueId(uniqueId: UUID) =
+    fun loadAPIProfileFromUniqueId(uniqueId: UUID) = runBlocking {
         rest.client()
             .get(
                 MOJANG_UNIQUEID_ENDPOINT.format(uniqueId)
             )
             .body<MojangPlayerProfile?>()
+    }
 }

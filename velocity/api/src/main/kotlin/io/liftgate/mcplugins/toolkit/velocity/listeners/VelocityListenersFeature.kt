@@ -1,6 +1,5 @@
 package io.liftgate.mcplugins.toolkit.velocity.listeners
 
-import com.github.shynixn.mccoroutine.velocity.registerSuspend
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.feature.CorePluginFeature
 import io.liftgate.mcplugins.toolkit.kompat.getAllServices
@@ -9,7 +8,7 @@ import org.jvnet.hk2.annotations.Service
 
 /**
  * A core plugin feature eagerly registering suspending
- * events in [CoroutineListener]s.
+ * events in [ToolkitListener]s.
  *
  * @author GrowlyX
  * @since 5/31/2023
@@ -22,11 +21,11 @@ class VelocityListenersFeature : CorePluginFeature
         val mcPlugin = plugin.plugin as ToolkitVelocityPlugin
 
         val listeners = plugin.locator
-            .getAllServices<CoroutineListener>()
+            .getAllServices<ToolkitListener>()
 
         listeners.forEach {
             mcPlugin.server.eventManager
-                .registerSuspend(
+                .register(
                     plugin.plugin, it
                 )
         }
@@ -36,7 +35,7 @@ class VelocityListenersFeature : CorePluginFeature
     {
         val mcPlugin = plugin.plugin as ToolkitVelocityPlugin
         val listeners = plugin.locator
-            .getAllServices<CoroutineListener>()
+            .getAllServices<ToolkitListener>()
 
         listeners.forEach {
             mcPlugin.server.eventManager

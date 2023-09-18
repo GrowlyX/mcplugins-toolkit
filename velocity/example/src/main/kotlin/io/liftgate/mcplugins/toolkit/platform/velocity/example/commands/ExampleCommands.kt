@@ -7,8 +7,8 @@ import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.platform.velocity.example.model.PlayerDataManager
 import io.liftgate.mcplugins.toolkit.platform.velocity.component
 import jakarta.inject.Inject
-import kotlinx.coroutines.runBlocking
 import org.jvnet.hk2.annotations.Service
+import java.util.concurrent.CompletableFuture.runAsync
 
 /**
  * @author GrowlyX
@@ -22,13 +22,12 @@ class ExampleCommands : ToolkitCommand()
 
     @CommandAlias("leaderboards|lbs")
     @CommandPermission("op")
-    fun onLeaderboards(sender: Player) =
-        runBlocking {
-            sender.sendMessage("=== Top 10 deaths ===".component())
+    fun onLeaderboards(sender: Player) = runAsync {
+        sender.sendMessage("=== Top 10 deaths ===".component())
 
-            manager.aggregateTop10KillsEntries()
-                .forEachIndexed { index, result ->
-                    sender.sendMessage("#${index + 1}. ${result.username}: ${result.value}".component())
-                }
-        }
+        manager.aggregateTop10KillsEntries()
+            .forEachIndexed { index, result ->
+                sender.sendMessage("#${index + 1}. ${result.username}: ${result.value}".component())
+            }
+    }
 }

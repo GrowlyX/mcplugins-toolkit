@@ -1,6 +1,5 @@
 package io.liftgate.mcplugins.toolkit.velocity
 
-import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
@@ -30,7 +29,6 @@ import java.util.logging.Logger
  * @since 6/4/2023
  */
 abstract class ToolkitVelocityPlugin(
-    suspendingPluginContainer: SuspendingPluginContainer,
     directory: Path
 ) : ToolkitPlugin
 {
@@ -44,12 +42,6 @@ abstract class ToolkitVelocityPlugin(
 
     private val _dataFolder = directory.toFile()
     private var pluginEnabled = false
-
-    init
-    {
-        suspendingPluginContainer
-            .initialize(this)
-    }
 
     @Subscribe
     fun ProxyInitializeEvent.on()

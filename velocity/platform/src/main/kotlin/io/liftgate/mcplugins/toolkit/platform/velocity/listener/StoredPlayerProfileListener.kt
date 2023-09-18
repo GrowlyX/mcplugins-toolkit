@@ -5,7 +5,7 @@ import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.LoginEvent
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfile
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfileManager
-import io.liftgate.mcplugins.toolkit.velocity.listeners.CoroutineListener
+import io.liftgate.mcplugins.toolkit.velocity.listeners.ToolkitListener
 import jakarta.inject.Inject
 import org.jvnet.hk2.annotations.Service
 
@@ -14,13 +14,13 @@ import org.jvnet.hk2.annotations.Service
  * @since 6/3/2023
  */
 @Service
-class StoredPlayerProfileListener : CoroutineListener
+class StoredPlayerProfileListener : ToolkitListener
 {
     @Inject
     lateinit var profileManager: StoredPlayerProfileManager
 
     @Subscribe(order = PostOrder.LATE)
-    suspend fun onPlayerJoin(event: LoginEvent)
+    fun onPlayerJoin(event: LoginEvent)
     {
         val profile = StoredPlayerProfile(
             uniqueId = event.player.uniqueId,

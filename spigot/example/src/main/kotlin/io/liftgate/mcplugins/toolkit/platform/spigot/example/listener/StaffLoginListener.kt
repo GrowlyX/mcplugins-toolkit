@@ -6,7 +6,7 @@ import io.liftgate.mcplugins.toolkit.datastore.redis.RedisDatastore
 import io.liftgate.mcplugins.toolkit.message
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLang
 import io.liftgate.mcplugins.toolkit.profile.StoredPlayerProfileManager
-import io.liftgate.mcplugins.toolkit.spigot.listeners.CoroutineListener
+import io.liftgate.mcplugins.toolkit.spigot.listeners.ToolkitListener
 import jakarta.inject.Inject
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -20,7 +20,7 @@ import java.util.*
  * @since 7/29/2023
  */
 @Service
-class StaffLoginListener : CoroutineListener, Eager, PostConstruct
+class StaffLoginListener : ToolkitListener, Eager, PostConstruct
 {
     @Inject
     lateinit var redis: RedisDatastore

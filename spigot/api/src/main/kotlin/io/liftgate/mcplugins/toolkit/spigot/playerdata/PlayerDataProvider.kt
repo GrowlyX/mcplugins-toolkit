@@ -1,14 +1,11 @@
 package io.liftgate.mcplugins.toolkit.spigot.playerdata
 
-import com.github.shynixn.mccoroutine.bukkit.registerSuspendingEvents
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import io.liftgate.mcplugins.toolkit.contracts.Eager
 import io.liftgate.mcplugins.toolkit.playerdata.PlayerData
 import io.liftgate.mcplugins.toolkit.spigot.ToolkitSpigotPlugin
 import jakarta.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -19,9 +16,12 @@ import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.glassfish.hk2.api.PostConstruct
 import org.jvnet.hk2.annotations.Contract
-import org.litote.kmongo.coroutine.CoroutineCollection
+import org.litote.kmongo.findOne
+import org.litote.kmongo.save
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import java.util.logging.Level
 
 /**
  * A lifecycle manager for user data
@@ -42,7 +42,7 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     @Inject
     lateinit var plugin: ToolkitSpigotPlugin
 
-    abstract fun collection(): CoroutineCollection<T>
+    abstract fun collection(): MongoCollection<T>
     abstract fun createNew(uniqueId: UUID): T
 
     fun findNullable(uniqueId: UUID) = playerProfileCache[uniqueId]
@@ -54,7 +54,7 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     override fun postConstruct()
     {
         plugin.server.pluginManager
-            .registerSuspendingEvents(
+            .registerEvents(
                 this, plugin
             )
     }
@@ -62,27 +62,35 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     @EventHandler
     fun onPlayerPreLogin(event: AsyncPlayerPreLoginEvent)
     {
-        runBlocking {
-            val playerProfile = collection()
-                .findOne(
-                    Filters.eq(
-                        "_id",
-                        event.uniqueId.toString()
-                    )
+        val playerProfile = collection()
+            .findOne(
+                Filters.eq(
+                    "_id",
+                    event.uniqueId.toString()
                 )
-                ?.apply {
-                    onLoad()
-                }
-                ?: createNew(event.uniqueId)
-                    .apply {
-                        onInitialCreation()
-                        onLoad()
-
-                        save(profile = this)
+            )
+            ?.apply {
+                onLoadAsync()
+                    .exceptionally {
+                        plugin.logger.log(Level.WARNING, "Failed to run onLoad() for profile ${event.uniqueId}", it)
+                        return@exceptionally null
                     }
+                    .join()
+            }
+            ?: createNew(event.uniqueId)
+                .apply {
+                    CompletableFuture
+                        .allOf(onInitialCreationAsync(), onLoadAsync())
+                        .exceptionally {
+                            plugin.logger.log(Level.WARNING, "Failed to run onLoad() for initial configuration of profile ${event.uniqueId}", it)
+                            return@exceptionally null
+                        }
+                        .join()
 
-            playerProfileCache[event.uniqueId] = playerProfile
-        }
+                    save(profile = this)
+                }
+
+        playerProfileCache[event.uniqueId] = playerProfile
     }
 
     @EventHandler
@@ -98,7 +106,7 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     }
 
     @EventHandler
-    suspend fun onPlayerJoin(event: PlayerJoinEvent)
+    fun onPlayerJoin(event: PlayerJoinEvent)
     {
         val profile = find(event.player)
 
@@ -121,7 +129,7 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
     }
 
     @EventHandler
-    suspend fun onPlayerQuit(event: PlayerQuitEvent)
+    fun onPlayerQuit(event: PlayerQuitEvent)
     {
         val playerProfile = playerProfileCache
             .remove(event.player.uniqueId)
@@ -133,10 +141,8 @@ abstract class PlayerDataProvider<T : PlayerData> : Listener, PostConstruct, Eag
         save(profile = playerProfile)
     }
 
-    suspend fun save(profile: T)
-    {
-        withContext(Dispatchers.IO) {
+    fun save(profile: T) = CompletableFuture
+        .runAsync {
             collection().save(profile)
         }
-    }
 }

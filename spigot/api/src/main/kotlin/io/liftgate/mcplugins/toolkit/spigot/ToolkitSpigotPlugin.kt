@@ -1,12 +1,10 @@
 package io.liftgate.mcplugins.toolkit.spigot
 
-import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
-import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
-import com.github.shynixn.mccoroutine.bukkit.mcCoroutineConfiguration
 import io.liftgate.mcplugins.toolkit.*
 import io.liftgate.mcplugins.toolkit.descriptor.DescriptorProcessor
 import io.liftgate.mcplugins.toolkit.spigot.version.ServerVersionQualifierProcessor
 import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
 
 /**
  * An implementation of [ToolkitPlugin] which implements
@@ -15,7 +13,7 @@ import org.bukkit.Bukkit
  * @author GrowlyX
  * @since 5/31/2023
  */
-abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
+abstract class ToolkitSpigotPlugin : JavaPlugin(), ToolkitPlugin
 {
     private var pluginEnabled = false
     private val container by lazy {
@@ -43,10 +41,8 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
         }
     }
 
-    override suspend fun onEnableAsync()
+    override fun onEnable()
     {
-        mcCoroutineConfiguration.shutdownStrategy = ShutdownStrategy.MANUAL
-
         // something did not go well during startup
         if (!container.onEnable())
         {
@@ -60,7 +56,7 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
         pluginEnabled = true
     }
 
-    override suspend fun onDisableAsync()
+    override fun onDisable()
     {
         // We cannot guarantee services
         // have been initialized properly, so we're not
@@ -68,7 +64,6 @@ abstract class ToolkitSpigotPlugin : SuspendingJavaPlugin(), ToolkitPlugin
         if (pluginEnabled)
         {
             container.onDisable()
-            mcCoroutineConfiguration.disposePluginSession()
         }
     }
 }

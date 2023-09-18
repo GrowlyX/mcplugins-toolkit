@@ -1,21 +1,21 @@
 package io.liftgate.mcplugins.toolkit.platform.spigot.example.model
 
+import com.mongodb.client.MongoCollection
 import io.liftgate.localize.Localizer
 import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.localizer.CoreLang
-import io.liftgate.mcplugins.toolkit.spigot.identity
 import io.liftgate.mcplugins.toolkit.spigot.playerdata.PlayerDataProvider
 import jakarta.inject.Inject
+import kotlinx.coroutines.*
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.*
-import org.litote.kmongo.coroutine.CoroutineCollection
-import org.litote.kmongo.coroutine.aggregate
 import java.util.*
 
 /**
@@ -28,7 +28,7 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
     @Inject
     lateinit var mongo: MongoDatastore
 
-    private lateinit var collection: CoroutineCollection<PlayerDataModel>
+    private lateinit var collection: MongoCollection<PlayerDataModel>
 
     override fun collection() = collection
     override fun createNew(uniqueId: UUID) = PlayerDataModel(uniqueId, "")
@@ -44,7 +44,7 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
     fun PlayerJoinEvent.on()
     {
         joinMessage = Localizer.of<CoreLang>()
-            .playerJoins(player.identity)
+            .playerJoins(player)
             .first()
     }
 
@@ -52,12 +52,12 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
     fun PlayerQuitEvent.on()
     {
         quitMessage = Localizer.of<CoreLang>()
-            .playerLeaves(player.identity, "quit")
+            .playerLeaves(player, "quit")
             .first()
     }
 
     @EventHandler
-    suspend fun onPlayerDeath(event: PlayerDeathEvent)
+    fun onPlayerDeath(event: PlayerDeathEvent)
     {
         findNullable(event.entity)
             ?.apply {
@@ -73,7 +73,7 @@ class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
         val value: Int
     )
 
-    suspend fun aggregateTop10KillsEntries() =
+    fun aggregateTop10KillsEntries() =
         collection
             .aggregate<Top10Result>(
                 sort(

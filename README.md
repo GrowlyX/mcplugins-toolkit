@@ -12,7 +12,6 @@ Kotlin Minecraft plugin development toolkit.
      - References taken from [PluginInject](https://github.com/natemort/PluginInject)
  - Data store (via MongoDB)
    - Player profile caching
- - Coroutine plugin framework (via [MCCoroutine](https://github.com/Shynixn/MCCoroutine))
  - Commands (via [ACF](https://github.com/aikar/commands))
  - YAML Configurations
    - Auto-reload of files
@@ -22,7 +21,6 @@ Kotlin Minecraft plugin development toolkit.
 
 ## Getting started:
  - Clone this repository
-   - Ensure you have built the [BearLocalizer](https://github.com/GrowlyX/bearlocalizer) project to your local maven repository.
  - Opening the project in your JetBrains IDE:
    - Click run on the pre-defined `Build All Modules` gradle configuration.
  - Building through terminal:

@@ -2,14 +2,9 @@ package io.liftgate.mcplugins.toolkit.platform.spigot.example.commands
 
 import co.aikar.commands.annotation.CommandAlias
 import co.aikar.commands.annotation.CommandPermission
-import com.github.jershell.kbson.UUIDSerializer
 import io.liftgate.mcplugins.toolkit.commands.ToolkitCommand
 import io.liftgate.mcplugins.toolkit.platform.spigot.example.model.PlayerDataManager
-import io.liftgate.mcplugins.toolkit.platform.spigot.runAsync
 import jakarta.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.bukkit.ChatColor
@@ -21,6 +16,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.jvnet.hk2.annotations.Service
+import java.util.concurrent.CompletableFuture.runAsync
 
 /**
  * @author GrowlyX
@@ -37,21 +33,12 @@ class ExampleCommands : ToolkitCommand()
 
     @CommandAlias("leaderboards|lbs")
     @CommandPermission("op")
-    fun onLeaderboards(sender: CommandSender) =
-        runBlocking {
-            sender.sendMessage("=== Top 10 deaths ===")
-
-            runAsync {
-                manager.aggregateTop10KillsEntries()
-                    .forEachIndexed { index, result ->
-                        sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
-                    }
-
-                sender.sendMessage("[async] on ${Thread.currentThread().name}")
+    fun onLeaderboards(sender: CommandSender) = runAsync {
+        manager.aggregateTop10KillsEntries()
+            .forEachIndexed { index, result ->
+                sender.sendMessage("${ChatColor.BOLD}#${index + 1}. ${ChatColor.RESET}${result.username}: ${result.value}")
             }
-
-            sender.sendMessage("[runBlocking] on ${Thread.currentThread().name}")
-        }
+    }
 
     @CommandAlias("test-serialization")
     @CommandPermission("op")

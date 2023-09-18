@@ -1,6 +1,5 @@
 package io.liftgate.mcplugins.toolkit.spigot.defaults
 
-import com.github.shynixn.mccoroutine.bukkit.SuspendingJavaPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPlugin
 import io.liftgate.mcplugins.toolkit.ToolkitPluginContainer
 import io.liftgate.mcplugins.toolkit.bindTo
@@ -34,7 +33,6 @@ class DefaultSpigotBindingsFeature : CorePluginFeature
                 .bindTo(
                     ToolkitPlugin::class,
                     ToolkitSpigotPlugin::class,
-                    SuspendingJavaPlugin::class,
                     JavaPlugin::class,
                     Plugin::class,
                     plugin.plugin::class as KClass<in ToolkitSpigotPlugin>
