@@ -41,10 +41,13 @@ class StaffLoginListener : ToolkitListener, Eager, PostConstruct
                 .loadProfileFromUniqueId(
                     get<UUID>("player")
                 )
+                .join()
 
             Localizer.of<CoreLang>()
                 .staffLogin(profile.username)
-                .forEach(Bukkit::broadcastMessage)
+                .forEach(
+                    Bukkit::broadcastMessage
+                )
         }
     }
 

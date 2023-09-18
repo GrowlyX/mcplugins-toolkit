@@ -19,6 +19,7 @@ import org.jvnet.hk2.annotations.Service
 import org.litote.kmongo.*
 import java.util.*
 import java.util.concurrent.CompletableFuture.runAsync
+import java.util.concurrent.CompletableFuture.supplyAsync
 import java.util.logging.Logger
 import kotlin.time.Duration.Companion.minutes
 
@@ -105,9 +106,12 @@ class StoredPlayerProfileManager : Eager, PostConstruct
     }
 
     fun loadProfileFromUniqueId(uniqueId: UUID) =
-        loadProfileFromUniqueIdNullable(uniqueId)!!
+        loadProfileFromUniqueIdNullable(uniqueId)
+            .thenApplyAsync {
+                it!!
+            }
 
-    fun loadProfileFromUniqueIdNullable(uniqueId: UUID) = runAsync {
+    fun loadProfileFromUniqueIdNullable(uniqueId: UUID) = supplyAsync {
         idToProfileMappings.get(uniqueId)
             ?: collection
                 .findOne(
@@ -122,9 +126,12 @@ class StoredPlayerProfileManager : Eager, PostConstruct
     }
 
     fun loadProfileFromUsername(username: String) =
-        loadProfileFromUsernameNullable(username)!!
+        loadProfileFromUsernameNullable(username)
+            .thenApplyAsync {
+                it!!
+            }
 
-    fun loadProfileFromUsernameNullable(username: String) = runAsync {
+    fun loadProfileFromUsernameNullable(username: String) = supplyAsync {
         nameToProfileMappings.get(username.lowercase())
             ?: collection
                 .findOne(
