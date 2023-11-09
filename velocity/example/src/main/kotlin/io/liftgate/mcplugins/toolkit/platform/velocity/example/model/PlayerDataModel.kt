@@ -14,6 +14,6 @@ import java.util.*
 data class PlayerDataModel(
     @SerialName("_id")
     override val uniqueId: @Contextual UUID,
-    override var username: String,
+    override var username: String = "",
     var deaths: Int = 0
 ) : PlayerData

@@ -1,9 +1,6 @@
 package io.liftgate.mcplugins.toolkit.platform.velocity.example.model
 
-import com.mongodb.client.MongoCollection
-import io.liftgate.mcplugins.toolkit.datastore.mongo.MongoDatastore
 import io.liftgate.mcplugins.toolkit.velocity.playerdata.PlayerDataProvider
-import jakarta.inject.Inject
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.jvnet.hk2.annotations.Service
@@ -17,20 +14,8 @@ import java.util.*
 @Service
 class PlayerDataManager : PlayerDataProvider<PlayerDataModel>()
 {
-    @Inject
-    lateinit var mongo: MongoDatastore
-
-    private lateinit var collection: MongoCollection<PlayerDataModel>
-
-    override fun collection() = collection
-    override fun createNew(uniqueId: UUID) = PlayerDataModel(uniqueId, "")
-
-    override fun postConstruct()
-    {
-        collection = mongo.client()
-            .getCollection<PlayerDataModel>()
-        super.postConstruct()
-    }
+    override fun createNew(uniqueId: UUID) = PlayerDataModel(uniqueId)
+    override fun typeOf() = PlayerDataModel::class.java
 
     @Serializable
     data class Top10Result(

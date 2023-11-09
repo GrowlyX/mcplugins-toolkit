@@ -97,4 +97,6 @@ class MongoDatastore : PostConstruct, PreDestroy, Datastore<MongoDatabase>, Eage
     override fun client() = checkNotNull(database) {
         "MongoDatastore was not initialized properly! Check startup logs for any errors."
     }
+
+    fun startSession() = this.client!!.startSession()
 }
